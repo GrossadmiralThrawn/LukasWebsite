@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <title>Lukas Diettrich Software Developer</title>
     <style>
-        body{
+        body {
             background: black;
         }
 
-        .h1-container
-        {
-            color:     lightgray;
+        .h1-container {
+            color: slategrey;
             font-size: 150px;
             text-transform: uppercase;
             text-decoration: none;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 900; /* Set the font weight to 750 for extra bold */
+            font-weight: 900;
         }
 
         .central-text {
@@ -23,34 +22,42 @@
         }
 
         .grey-button {
-            background-color: lightgray;
+            background-color: slategrey;
             color: black;
             padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
-            margin: 10px 15px;
+            margin: 10px 0;
             cursor: pointer;
             border: none;
             border-radius: 4px;
         }
-        .grey-font
-        {
-            color: lightgray;
+
+        #button-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 15px;
+        }
+
+        .grey-font {
+            color: slategrey;
         }
     </style>
 </head>
+
 <body>
-<a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" class="grey-button">LinkedIn-Profil</a>
+<div id="button-container">
+    <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" class="grey-button">
+        LinkedIn-Profil
+    </a>
+    <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" class="grey-button">
+        LinkedIn-Profil
+    </a>
+</div>
 <br>
-<br>
-<br>
-    <h1>
-        <div class="h1-container">
-            <div class="central-text">Hello there</div>
-        </div>
-    </h1>
+<h1 class="h1-container central-text">Hello there</h1>
 <div class="grey-font">Hallo Welt</div>
 </body>
 </html>
