@@ -23,4 +23,12 @@ class MainSite {
     fun selfIntroduction(): String {
         return "selfIntroduction"
     }
+
+
+
+
+    @GetMapping(path = ["/welcome/projectExamples"])
+    fun projectExamples(): String {
+        return "projectExamples"
+    }
 }
