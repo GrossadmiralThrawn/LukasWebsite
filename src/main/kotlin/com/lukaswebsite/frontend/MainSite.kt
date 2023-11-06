@@ -15,4 +15,12 @@ class MainSite {
     fun welcome(): String {
         return "index"
     }
+
+
+
+
+    @GetMapping(path = ["/welcome/selfIntroduction"])
+    fun selfIntroduction(): String {
+        return "selfIntroduction"
+    }
 }
