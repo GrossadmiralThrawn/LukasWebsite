@@ -18,9 +18,17 @@
             margin-top: 10px; /*Ändert den Abstand zwischen Buttons und Überschrift.*/
         }
 
+        .central-text-headline {
+            text-align: center;
+            vertical-align: top;
+            color: white; /* Hinzugefügt, um den Text sichtbar zu machen */
+        }
+
         .central-text {
             text-align: center;
             vertical-align: top;
+            font-size: 48px;
+            color: white; /* Hinzugefügt, um den Text sichtbar zu machen */
         }
 
         .grey-button {
@@ -42,42 +50,38 @@
             justify-content: space-between;
             margin: 10px 15px;
         }
-
-        .standard-text-form
-        {
-            color: slategrey;
-            font-size: 50px;
-            font-family: "Cambria", sans-serif;
-            text-align: center;
-        }
     </style>
 </head>
 <!--box-shadow: 10px 10px 15px silver;-->
 
 <body>
-    <div id="button-container">
-        <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" class="grey-button">
-            LinkedIn-Profil
-        </a>
-        <a href="https://github.com/GrossadmiralThrawn/" class="grey-button">
-            GitHub-Account
-        </a>
-    </div>
-    <h1 class="h1-container central-text">Lukas Philipp Diettrich</h1>
-    <div class="standard-text-form">Moin! Probably your asking yourself: <br> what your doing here.
-         I'm Lukas and my profession is to learn everything about IT. <br>
-         I study business computer science at the University of Applied Sciences Merseburg</div>
-    <div class="standard-text-form blurred-line">Actually I improve my web development skills but I also <br>
-        can write apps for Android and I learned something about embedded systems </br>
-        software. Additionally, I actually do some experiments with NVIDIA CUDA</div>
+<div id="button-container">
+    <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" class="grey-button">
+        LinkedIn-Profil
+    </a>
+    <a href="https://github.com/GrossadmiralThrawn/" class="grey-button">
+        GitHub-Account
+    </a>
+</div>
+<h1 class="h1-container central-text-headline">Lukas Philipp Diettrich</h1>
+<div class="central-text">
+    Moin! Maybe you're asking yourself: <br> what you're doing here.
+    I'm Lukas and my profession is to learn everything about IT. <br>
+    I study business computer science at the University of Applied Sciences Merseburg
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="standard-text-form">As you can see I linked my GitHub an LinkedIn accounts <br>
-        There you can find some of my projects I made and also my experiences in different
-        companies. Enjoy the reading.
-    </div>
+    Currently, I'm improving my web development skills, but I can also <br>
+    write apps for Android, and I've learned something about embedded systems <br>
+    software. Additionally, I'm actually conducting experiments with NVIDIA CUDA.
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="central-text">
+    As you can see, I've linked my GitHub and LinkedIn accounts. <br>
+    There you can find some of my projects I've made and also my experiences in different
+    companies. Enjoy the reading.
+</div>
 </body>
 </html>
