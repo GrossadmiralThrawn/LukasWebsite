@@ -1,0 +1,96 @@
+/* Allgemeine Stile */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.light-mode {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+body {
+    font-family: 'Fira Code', monospace;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Button für GitHub in der linken oberen Ecke */
+.github-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+/* Button für Projekte in der rechten oberen Ecke */
+.projects-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+}
+
+/* Zusätzliche Anpassungen für die Buttons */
+.button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #343344;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+    background-color: #34495e;
+    transform: scale(1.05);
+}
+
+/* Modus-Umschaltknopf */
+#modeToggle {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #f1c40f; /* Hellgelb für Sonne */
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+body.dark-mode #modeToggle {
+    background-color: #2c3e50; /* Dunkelblau für Mond */
+    color: #ecf0f1;
+}
+
+.sun-icon::before {
+    content: '☀️'; /* Unicode für Sonne */
+}
+
+.moon-icon::before {
+    content: '🌙'; /* Unicode für Mond */
+}
+
+/* Überschrift-Stile */
+h1 {
+    text-align: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 3.5em;
+    margin-top: 80px; /* Platz für Buttons */
+    margin-bottom: 20px;
+}
+
+/* Einleitungstext-Stile */
+.intro-text {
+    text-align: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 1.5em;
+    margin: 10px 20px;
+}
