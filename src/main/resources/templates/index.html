@@ -6,22 +6,67 @@
     <title>About Me</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="styles.css"> <!-- Verweis auf die ausgelagerte CSS-Datei -->
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark-mode"> <!-- Dark Mode als Standard -->
+<body class="dark-mode">
 
-<!-- Buttons für GitHub und Projekte -->
 <a href="https://github.com/GrossadmiralThrawn" target="_blank" class="button github-button">GitHub</a>
 <a th:href="@{/projects}" class="button projects-button">Projekte</a>
 
-<button id="modeToggle" class="moon-icon"></button> <!-- Moon icon als Standard -->
+<button id="modeToggle" class="moon-icon"></button>
 
 <h1>Software developer <br>Lukas Philipp Diettrich</h1>
 <br>
-<p class="intro-text">My name is Lukas Diettrich. I was born on 16th September 2000 and study computer science with a focus on economy.
+<p class="intro-text">My name is Lukas Diettrich. I was born on 16th September 2000 in Halle (Saale) in Saxony-Anhalt
+    and study computer science with a focus on economy.
     When I started to learn programming I used to learn C. Later I continued with Java. Nowadays, I use C++ and Kotlin.</p>
-<p class="intro-text">I like to write apps for Android in Android Studio and every type of C++ project. I invite you to explore some of my
-    projects. You can find some of my projects below or at the link at the top of my website.</p>
+<p class="intro-text">I am interested in writing apps in Android Studio and any kind of C++ project. I would like to invite
+    you to have a look at some of my projects. You can find three of the most important projects below. You can find
+    more projects by clicking on the projects button on the top right.</p>
+
+<br>
+<br>
+<br>
+<br>
+
+<h2>Most important projects</h2>
+<br>
+<br>
+<h3>1. My own website</h3>
+<p class="intro-text">One of the main reasons for creating this website was to create a
+    project platform for my job applications that clearly presents my skills and projects.</p>
+<p class="intro-text">I would also like to use this website to give beginners in the field
+    of software development some ideas and inspiration for their own projects, as I often had problems
+    finding ideas for my own projects at the beginning. That's why I like to share my own projects and learning progress
+    to make it easier for others to get started.</p>
+<p class="intro-text">I used Spring Boot to implement the website. Spring Boot is a powerful tool that greatly
+    simplifies the creation of stand-alone, production-ready Spring-based applications. Spring Boot is particularly suitable
+    for web applications as it enables fast and scalable solutions.</p>
+<p class="intro-text">Spring is available in three programming languages: Java, Kotlin and Groovy. For me, Kotlin was the
+    right choice for several reasons. Kotlin is a modern, expressive language that is fully interoperable with Java and
+    offers many advantages, including a more precise syntax and advanced language features such as null safety.
+    Especially in combination with Spring Boot, Kotlin has proven to be extremely effective.</p>
+<div class="image-container">
+    <img src="/images/WebsiteProjekt1.jpeg" alt="Beschreibung des Bildes">
+</div>
+
+<div class="image-container">
+    <img src="/images/WebsiteProjekt2.jpeg" alt="Beschreibung des Bildes">
+</div>
+
+<div class="image-container">
+    <img src="/images/WebsiteProjekt3LightMode.jpeg" alt="Beschreibung des Bildes">
+</div>
+
+<div class="image-container">
+    <img src="/images/WebsiteProjekt4Code1HTML.jpeg" alt="Beschreibung des Bildes">
+</div>
+
+<div class="image-container">
+    <img src="/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg" alt="Beschreibung des Bildes">
+</div>
+
+
 
 <script>
     const modeToggle = document.getElementById('modeToggle');
