@@ -15,7 +15,7 @@ class GeneralUsageEndpoints {
     fun aboutMe(model: Model): String {
         val introductionText = mapOf(
             "intro1" to "My name is Lukas Diettrich. I was born on 16th September 2000 in Halle (Saale) in Saxony-Anhalt and study computer science with a focus on economy. When I started to learn programming I used to learn C. Later I continued with Java. Nowadays, I use C++ and Kotlin.",
-            "intro2" to "I am interested in writing apps in Android Studio and any kind of C++ project. I would like to invite you to have a look at some of my projects. You can find three of the most important projects below. You can find more projects by clicking on the projects button on the top right."
+            "intro2" to "I am interested in writing apps in Android Studio and any kind of C++ project. I would like to invite you to have a look at some of my projects. You can find two (2) of my most important projects below. You can find more projects by clicking on the projects button on the top right."
         )
 
         val websiteProjectDetails = mapOf(
