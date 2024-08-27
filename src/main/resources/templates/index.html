@@ -29,6 +29,7 @@
 <br>
 <br>
 <h3 th:text="${websiteProjectDetails.title}"></h3>
+<br>
 <h4>Introduction</h4>
 <p class="intro-text" th:each="intro : ${websiteProjectDetails.introduction}" th:text="${intro}"></p>
 
@@ -36,7 +37,7 @@
 <p class="intro-text" th:text="${websiteProjectDetails.frontend}"></p>
 <p class="intro-text" th:text="${websiteProjectDetails.features}"></p>
 
-<div class="image-container" th:each="image : ${websiteProjectDetails.images}">
+<div class="image-container" th:each="image: ${websiteProjectDetails.images}">
     <img th:src="${image}" alt="Project image">
     <hr class="divider">
 </div>
@@ -48,7 +49,7 @@
 <br>
 
 <p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
-<div class="image-container" th:each="image : ${websiteProjectDetails.codeSection.images}">
+<div class="image-container" th:each="image: ${websiteProjectDetails.images}">
     <img th:src="${image}" alt="Code image">
     <hr class="divider">
 </div>

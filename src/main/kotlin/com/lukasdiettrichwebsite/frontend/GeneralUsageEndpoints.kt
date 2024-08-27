@@ -36,7 +36,8 @@ class GeneralUsageEndpoints {
                 "/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg"
             ),
             "codeSection" to mapOf(
-                "intro" to "As you can see here I use HTML and CSS. The HTML-File does not contain any kind of design. The design is outsourced in a CSS-file named styles.css to create short HTML-files and make the design easy reusable",
+                "intro" to "As you can see here I use HTML and CSS. The HTML-File does not contain any kind of design. The design is outsourced in a CSS-file named styles.css to create short HTML-files and make the design easy reusable."
+                + "For the projects on this part of the website, images and texts are hardcoded to ensure persistent availability. On other parts, the data is outsourced to database systems.",
                 "images" to listOf(
                     "/images/WebsiteProjekt4Code1HTML.jpeg",
                     "/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg"
