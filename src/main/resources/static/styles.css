@@ -50,7 +50,7 @@ body {
     height: 40px;
     border: none;
     border-radius: 50%;
-    background-color: #f1c40f;
+    background-color: #87CEEB;
     color: #fff;
     font-size: 20px;
     cursor: pointer;
@@ -81,7 +81,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* h2-Definition */
 h2 {
     text-align: center;
     font-family: 'Fira Code', monospace;
@@ -90,12 +89,19 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Neue h3-Definition */
 h3 {
     text-align: center;
     font-family: 'Fira Code', monospace;
     font-size: 2.24em; /* 20% kleiner als h2 */
     margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+h4 {
+    text-align: center;
+    font-family: 'Fira Code', monospace;
+    font-size: 1.8em; /* 20% kleiner als h2 */
+    margin-top: 25px;
     margin-bottom: 15px;
 }
 
@@ -112,6 +118,11 @@ h3 {
     margin: 20px 0;
 }
 
+.image-container-big {
+    text-align: center;
+    margin: 20px 0;
+}
+
 .image-container img {
     max-width: 75%;
     height: auto;
@@ -120,7 +131,29 @@ h3 {
     transition: transform 0.3s, box-shadow 0.3s;
 }
 
+.image-container-big img {
+    max-width: 50%;
+    height: 66.6%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
 .image-container img:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Stil für den Trennstrich zwischen den Bildern */
+.divider {
+    border: none;
+    border-top: 2px solid #e0e0e0; /* Farbe des Trennstrichs, anpassbar je nach Design */
+    margin: 40px 0; /* Abstand zum vorherigen/nächsten Element */
+    width: 60%; /* Breite des Trennstrichs, anpassbar */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.dark-mode .image-divider {
+    border-top-color: #555; /* Anpassung der Farbe für den Dark Mode */
 }

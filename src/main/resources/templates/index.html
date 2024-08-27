@@ -17,12 +17,8 @@
 
 <h1>Software developer <br>Lukas Philipp Diettrich</h1>
 <br>
-<p class="intro-text">My name is Lukas Diettrich. I was born on 16th September 2000 in Halle (Saale) in Saxony-Anhalt
-    and study computer science with a focus on economy.
-    When I started to learn programming I used to learn C. Later I continued with Java. Nowadays, I use C++ and Kotlin.</p>
-<p class="intro-text">I am interested in writing apps in Android Studio and any kind of C++ project. I would like to invite
-    you to have a look at some of my projects. You can find three of the most important projects below. You can find
-    more projects by clicking on the projects button on the top right.</p>
+<p class="intro-text" th:text="${introductionText.intro1}"></p>
+<p class="intro-text" th:text="${introductionText.intro2}"></p>
 
 <br>
 <br>
@@ -32,41 +28,43 @@
 <h2>Most important projects</h2>
 <br>
 <br>
-<h3>1. My own website</h3>
-<p class="intro-text">One of the main reasons for creating this website was to create a
-    project platform for my job applications that clearly presents my skills and projects.</p>
-<p class="intro-text">I would also like to use this website to give beginners in the field
-    of software development some ideas and inspiration for their own projects, as I often had problems
-    finding ideas for my own projects at the beginning. That's why I like to share my own projects and learning progress
-    to make it easier for others to get started.</p>
-<p class="intro-text">I used Spring Boot to implement the website. Spring Boot is a powerful tool that greatly
-    simplifies the creation of stand-alone, production-ready Spring-based applications. Spring Boot is particularly suitable
-    for web applications as it enables fast and scalable solutions.</p>
-<p class="intro-text">Spring is available in three programming languages: Java, Kotlin and Groovy. For me, Kotlin was the
-    right choice for several reasons. Kotlin is a modern, expressive language that is fully interoperable with Java and
-    offers many advantages, including a more precise syntax and advanced language features such as null safety.
-    Especially in combination with Spring Boot, Kotlin has proven to be extremely effective.</p>
-<div class="image-container">
-    <img src="/images/WebsiteProjekt1.jpeg" alt="Beschreibung des Bildes">
+<h3 th:text="${websiteProjectDetails.title}"></h3>
+<h4>Introduction</h4>
+<p class="intro-text" th:each="intro : ${websiteProjectDetails.introduction}" th:text="${intro}"></p>
+
+<h4>Front-end</h4>
+<p class="intro-text" th:text="${websiteProjectDetails.frontend}"></p>
+<p class="intro-text" th:text="${websiteProjectDetails.features}"></p>
+
+<div class="image-container" th:each="image : ${websiteProjectDetails.images}">
+    <img th:src="${image}" alt="Project image">
+    <hr class="divider">
 </div>
 
-<div class="image-container">
-    <img src="/images/WebsiteProjekt2.jpeg" alt="Beschreibung des Bildes">
+<br>
+<br>
+
+<h4>Code</h4>
+<br>
+
+<p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
+<div class="image-container" th:each="image : ${websiteProjectDetails.codeSection.images}">
+    <img th:src="${image}" alt="Code image">
+    <hr class="divider">
 </div>
 
-<div class="image-container">
-    <img src="/images/WebsiteProjekt3LightMode.jpeg" alt="Beschreibung des Bildes">
+<br>
+<br>
+<br>
+
+<h3 th:text="${qrCodeAppDetails.title}"></h3>
+<h4>Introduction</h4>
+<p class="intro-text" th:text="${qrCodeAppDetails.intro}"></p>
+
+<div class="image-container-big" th:each="image : ${qrCodeAppDetails.images}">
+    <img th:src="${image}" alt="Screenshot der QR-Code-App">
+    <hr class="divider">
 </div>
-
-<div class="image-container">
-    <img src="/images/WebsiteProjekt4Code1HTML.jpeg" alt="Beschreibung des Bildes">
-</div>
-
-<div class="image-container">
-    <img src="/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg" alt="Beschreibung des Bildes">
-</div>
-
-
 
 <script>
     const modeToggle = document.getElementById('modeToggle');
