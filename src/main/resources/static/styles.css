@@ -1,8 +1,10 @@
+/* Dunkelmodus */
 body.dark-mode {
     background-color: #121212;
     color: #e0e0e0;
 }
 
+/* Hellmodus */
 body.light-mode {
     background-color: #ffffff;
     color: #000000;
@@ -13,18 +15,21 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
+/* GitHub-Button */
 .github-button {
     position: fixed;
     top: 10px;
     left: 10px;
 }
 
+/* Projekte-Button */
 .projects-button {
     position: fixed;
     top: 10px;
     right: 10px;
 }
 
+/* Allgemeine Button-Stile */
 .button {
     padding: 10px 20px;
     border: none;
@@ -41,6 +46,14 @@ body {
     transform: scale(1.05);
 }
 
+/* Große Button-Stile */
+.button-large {
+    padding: 15px 30px; /* Größere Polsterung */
+    font-size: 1.2em; /* Größere Schriftgröße */
+    border-radius: 10px; /* Abgerundete Ecken */
+}
+
+/* Modus-Wechsel-Button */
 #modeToggle {
     position: fixed;
     top: 10px;
@@ -65,6 +78,7 @@ body.dark-mode #modeToggle {
     color: #ecf0f1;
 }
 
+/* Symbole für Tag- und Nachtmodus */
 .sun-icon::before {
     content: '☀️';
 }
@@ -73,6 +87,7 @@ body.dark-mode #modeToggle {
     content: '🌙';
 }
 
+/* Überschriften-Stile */
 h1 {
     text-align: center;
     font-family: 'Fira Code', monospace;
@@ -105,6 +120,7 @@ h4 {
     margin-bottom: 15px;
 }
 
+/* Einführungstext */
 .intro-text {
     text-align: center;
     font-family: 'Fira Code', monospace;
@@ -156,6 +172,47 @@ h4 {
     margin-right: auto;
 }
 
-body.dark-mode .image-divider {
+body.dark-mode .divider {
     border-top-color: #555; /* Anpassung der Farbe für den Dark Mode */
+}
+
+/* Formular-Container für zentriertes Layout */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Vollständige Höhe des Viewports */
+    text-align: center;
+    margin-top: -4%; /* Formular um 5% nach oben verschieben */
+}
+
+
+/* Stile für den Login-Text */
+h1.login-title {
+    margin-top: 0; /* Kein zusätzlicher Abstand oben */
+    margin-bottom: 40px; /* Abstand zum nächsten Element */
+    font-size: 5em; /* Größe des Login-Textes */
+}
+
+/* Wrapper für die Eingabefelder */
+.input-container {
+    margin: 15px 0; /* Abstand zwischen den Eingabefeldern */
+}
+
+.input-field {
+    padding: 15px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%; /* Vollständig verfügbare Breite innerhalb des Containers */
+    max-width: 400px; /* Maximalbreite für größere Bildschirme */
+    box-sizing: border-box; /* Boxmodell einbeziehen */
+}
+
+/* Neue Klasse für den Login-Button mit größerem Stil */
+.button-large {
+    padding: 15px 30px; /* Größere Polsterung */
+    font-size: 1.2em; /* Größere Schriftgröße */
+    border-radius: 10px; /* Abgerundete Ecken für den Button */
 }
