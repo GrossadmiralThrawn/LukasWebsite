@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
 class GeneralUsageEndpoints {
-
     @GetMapping
     fun aboutMe(model: Model): String {
         val introductionText = mapOf(
@@ -63,6 +62,13 @@ class GeneralUsageEndpoints {
         return "index"
     }
 
+
+
+
+    @GetMapping("login")
+    fun login(): String {
+        return "Login"
+    }
 
 
 
