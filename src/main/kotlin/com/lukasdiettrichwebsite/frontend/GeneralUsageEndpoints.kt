@@ -65,29 +65,6 @@ class GeneralUsageEndpoints {
 
 
 
-    @GetMapping("login")
-    fun login(): String {
-        return "Login"
-    }
-
-
-
-    @GetMapping(path = ["/statistics"])
-    fun statistics(model: Model): String {
-        return "statistics"
-    }
-
-
-
-
-    @PostMapping(path = ["/statistics"])
-    fun statistics(): String {
-        return "statistics"
-    }
-
-
-
-
     @GetMapping(path = ["/projects"])
     fun projects(model: Model): String {
         return "projects"

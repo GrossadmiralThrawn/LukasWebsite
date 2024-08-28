@@ -2,13 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
   <title>Login</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Verknüpfung der externen CSS-Datei -->
+  <!-- Verwende th:href anstelle von href für korrekten Pfad -->
+  <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body class="dark-mode">
 <div class="form-container">
   <h1 class="login-title">Login</h1>
   <br>
-  <form th:action="@{/login}" method="post">
+  <form th:action="@{/user/login}" method="post">
     <div class="input-container"> <!-- Wrapper für Eingabefelder -->
       <label for="username" style="font-size: 2.5em;">Username:</label>
       <input type="text" id="username" name="username" class="input-field" />

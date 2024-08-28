@@ -27,14 +27,14 @@ class SecurityConfig (private val userDetailsService: UserService){
         http
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/statistics" /*, "/projects"*/).authenticated() // Sicherung der /statistics Route
+                    .requestMatchers("/user/statistics", "/user/dashboard").authenticated() // Sicherung der /statistics Route
                     .anyRequest().permitAll() // Alle anderen Routen sind frei zugänglich
             }
             .formLogin {
-                it.loginPage("/login").permitAll()
+                it.loginPage("/user/login").permitAll()
             }
             .logout {
-                it.logoutUrl("/logout").permitAll()
+                it.logoutUrl("/user/logout").permitAll()
             }
         return http.build()
     }

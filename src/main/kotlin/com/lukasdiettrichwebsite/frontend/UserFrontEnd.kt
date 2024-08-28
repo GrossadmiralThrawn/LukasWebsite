@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping
 
 
 
-@Controller ("user")
+@Controller
 class UserFrontEnd {
-    @GetMapping("/login")
+    @GetMapping("/user/login")
     fun login(): String {
         return "Login"
     }
@@ -21,7 +21,7 @@ class UserFrontEnd {
 
 
 
-    @GetMapping("/dashboard")
+    @GetMapping("/user/dashboard")
     fun dashboard(): String {
         return "Dashboard"
     }
@@ -29,22 +29,17 @@ class UserFrontEnd {
 
 
 
-
-    @GetMapping(path = ["statistics"])
-    fun statistics(model: Model): String {
+    @GetMapping("/user/statistics")
+    fun getStatistics(model: Model): String {
+        // Hier können Sie das Model mit Daten füllen, falls nötig.
         return "statistics"
     }
 
 
 
 
-    @PostMapping(path = ["statistics"])
-    fun statistics(): String {
+    @PostMapping("/user/statistics")
+    fun postStatistics(): String {
         return "statistics"
     }
-
-
-
-
-
 }
