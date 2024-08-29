@@ -32,14 +32,16 @@
 <br>
 <h4>Introduction</h4>
 <p class="intro-text" th:each="intro : ${websiteProjectDetails.introduction}" th:text="${intro}"></p>
-
+<br>
+<br>
+<br>
 <h4>Front-end</h4>
-<p class="intro-text" th:text="${websiteProjectDetails.frontend}"></p>
-<p class="intro-text" th:text="${websiteProjectDetails.features}"></p>
+<p class="intro-text">Android Studio offers a drag and drop GUI that allows you to drag and drop various UI elements onto a page internally known as an activity, where they are then arranged accordingly and can be customised to suit the project. Possible adjustments mainly concern the size, colour and possible text content. However, the number of customisation options is so large that anyone can use it to create their own very individual UI.</p>
 
-<div class="image-container" th:each="image: ${websiteProjectDetails.images}">
+<div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.images}">
     <img th:src="${image}" alt="Project image">
-    <hr class="divider">
+    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
+    <hr class="divider" th:if="${!iterStat.last}">
 </div>
 
 <br>
@@ -49,23 +51,40 @@
 <br>
 
 <p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
-<div class="image-container" th:each="image: ${websiteProjectDetails.images}">
-    <img th:src="${image}" alt="Code image">
-    <hr class="divider">
+<div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.codeSection.images}">
+    <img th:src="${image}" alt="Code snippet">
+    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
+    <hr class="divider" th:if="${!iterStat.last}">
 </div>
 
+<br>
 <br>
 <br>
 <br>
 
 <h3 th:text="${qrCodeAppDetails.title}"></h3>
+<br>
 <h4>Introduction</h4>
-<p class="intro-text" th:text="${qrCodeAppDetails.intro}"></p>
+<p class="intro-text" th:each="intro : ${qrCodeAppDetails.intro}" th:text="${intro}"></p>
 
-<div class="image-container-big" th:each="image : ${qrCodeAppDetails.images}">
+<div class="image-container-big" th:each="image, iterStat : ${qrCodeAppDetails.images}">
     <img th:src="${image}" alt="Screenshot der QR-Code-App">
-    <hr class="divider">
+    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
+    <hr class="divider" th:if="${!iterStat.last}">
+
+    <!-- Zusätzlicher Text nach dem siebten Bild -->
+    <div th:if="${iterStat.index == 6}">
+        <br>
+        <br>
+        <h4>Additional Information</h4>
+        <p class="intro-text" th:each="text : ${qrCodeAppDetails.additionalText}" th:text="${text}"></p>
+    </div>
 </div>
+
+<br>
+<br>
+<br>
+<br>
 
 <script>
     const modeToggle = document.getElementById('modeToggle');
@@ -85,5 +104,6 @@
         }
     });
 </script>
+
 </body>
 </html>

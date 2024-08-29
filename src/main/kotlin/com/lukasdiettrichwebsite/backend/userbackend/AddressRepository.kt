@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 
 
-interface AddressRepository: JpaRepository<AddressData, Long> {
+interface AddressRepository: JpaRepository<AddressData, ULong> {
     fun findByLocality(city: String): AddressData?
     fun findByCountry(country: String): AddressData?
     fun findByContinent(continent: Char): AddressData?

@@ -33,7 +33,7 @@ class UserInitializer {
 
             // Benutzer erstellen und speichern
             val user = UserData(
-                id = 0,
+                id = 0u,
                 firstName = "Lukas Philipp",
                 lastName = "Diettrich",
                 email = "lukasd2000@gmx.de",

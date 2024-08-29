@@ -10,15 +10,15 @@ import jakarta.persistence.Id
 
 
 @Entity
-class UserData (
+class UserData(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:        Long,
+    var id:        ULong,
     var firstName: String,
     var lastName:  String,
     var email:     String,
     var username:  String,
     var password:  String,
-    var addressId: Long,
+    var addressId: ULong,
 ) {
 }

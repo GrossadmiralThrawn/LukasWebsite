@@ -13,7 +13,7 @@ import jakarta.persistence.Id
 @Entity
 data class AddressData(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    private var id:            Long = 0,
+    private var id:            ULong = 0u,
     private val continent:     Char,
     private val country:       String,
     private val province:      String,
@@ -24,5 +24,5 @@ data class AddressData(
     private val streetNumber:  String,
     private val suite:         String,
 ){
-    fun getId(): Long = id
+    fun getId(): ULong = id
 }
