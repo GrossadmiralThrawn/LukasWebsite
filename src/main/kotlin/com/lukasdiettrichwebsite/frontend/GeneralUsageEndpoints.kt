@@ -1,17 +1,19 @@
 package com.lukasdiettrichwebsite.frontend
 
+import com.lukasdiettrichwebsite.backend.statistics.StatisticsService
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
 
 
 
 
 @Controller
-class GeneralUsageEndpoints {
+class GeneralUsageEndpoints (val statisticsService: StatisticsService) {
     @GetMapping
-    fun aboutMe(model: Model): String {
+    fun aboutMe(model: Model, request: HttpServletRequest): String {
+        statisticsService.recordStatistics("/", request)
         val introductionText = mapOf(
             "intro1" to "\n" +
                     "My name is Lukas Diettrich. I was born on 16th September 2000 in Halle (Saale) in Saxony-Anhalt and " +
@@ -95,7 +97,9 @@ class GeneralUsageEndpoints {
     }
 
     @GetMapping(path = ["/projects"])
-    fun projects(model: Model): String {
+    fun projects(model: Model, request: HttpServletRequest): String {
+        statisticsService.recordStatistics("/", request)
+
         return "projects"
     }
 }

@@ -53,7 +53,6 @@
 <p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
 <div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.codeSection.images}">
     <img th:src="${image}" alt="Code snippet">
-    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
     <hr class="divider" th:if="${!iterStat.last}">
 </div>
 
@@ -86,6 +85,10 @@
 <br>
 <br>
 
+<h2>More Projects and Networking</h2>
+<p class="intro-text">I hope I have been able to give you an interesting insight into my work. If you have any questions,
+    you can contact me <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" target="_blank">here</a> via my LinkedIn profile. Take also a look at some of my other projects. Otherwise, have a nice
+    day</p>
 <script>
     const modeToggle = document.getElementById('modeToggle');
     modeToggle.addEventListener('click', function() {

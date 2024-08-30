@@ -8,12 +8,12 @@ import java.time.LocalDateTime
 
 
 @Entity
-class StatisticsData {
+data class StatisticsData(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id:        ULong = 0u
-    var startTime: LocalDateTime = LocalDateTime.now()
-    var endTime:   LocalDateTime = LocalDateTime.now()
-    var url:       String = ""
-    var ip:        String = ""
-}
+    var id:        ULong         = 0UL,
+    var sessionId: String,
+    var startTime: LocalDateTime = LocalDateTime.now(),
+    var endTime:   LocalDateTime,
+    var url:       String,
+    var ip:        String, )
