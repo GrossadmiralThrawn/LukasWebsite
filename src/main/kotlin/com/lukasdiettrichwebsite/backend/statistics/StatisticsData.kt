@@ -7,6 +7,8 @@ import jakarta.persistence.Id
 import java.time.LocalDateTime
 
 
+
+
 @Entity
 data class StatisticsData(
     @Id

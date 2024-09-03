@@ -9,20 +9,21 @@ import java.time.LocalDateTime
 
 
 
+
 @Service
-class StatisticsService (val statisticsDataRepository: StatisticsRepository) {
+class StatisticsService(private val statisticsDataRepository: StatisticsRepository) {
+
     fun recordStatistics(url: String, request: HttpServletRequest) {
         val ip = request.remoteAddr
         val sessionId = request.session.id
 
-        // Überprüfen, ob bereits ein Eintrag für diese Sitzung existiert
         val existingStatistics = statisticsDataRepository.findBySessionIdAndUrl(sessionId, url)
 
         if (existingStatistics == null) {
             val statistics = StatisticsData(
                 sessionId = sessionId,
                 startTime = LocalDateTime.now(),
-                endTime = LocalDateTime.now(), // Dies können Sie später aktualisieren, um die tatsächliche Endzeit zu speichern
+                endTime = LocalDateTime.now(),
                 url = url,
                 ip = ip
             )
@@ -30,9 +31,12 @@ class StatisticsService (val statisticsDataRepository: StatisticsRepository) {
         }
     }
 
-
-
     fun getAllStatistics(): List<StatisticsData> {
         return statisticsDataRepository.findAll().toList()
+    }
+
+    fun getStatisticsForLastWeek(): List<StatisticsData> {
+            val oneWeekAgo = LocalDateTime.now().minusWeeks(1)
+            return statisticsDataRepository.findAllByStartTimeAfter(oneWeekAgo)
     }
 }
