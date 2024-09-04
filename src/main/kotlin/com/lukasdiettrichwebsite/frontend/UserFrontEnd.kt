@@ -87,7 +87,7 @@ class UserFrontEnd(
 
     @GetMapping("/user/logout")
     fun logout(): String {
-        return "logout"
+        return "redirect:/user/login"
     }
 }
 

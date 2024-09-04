@@ -34,7 +34,9 @@ class SecurityConfig(
                 it.loginPage("/user/login").permitAll()
             }
             .logout {
-                it.logoutUrl("/user/logout").permitAll()
+                it.logoutUrl("/user/logout")
+                    .logoutSuccessUrl("/user/login")  // Leitet nach dem Logout zur Login-Seite weiter
+                    .permitAll()
             }
         return http.build()
     }
