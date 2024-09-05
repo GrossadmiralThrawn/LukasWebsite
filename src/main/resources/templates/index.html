@@ -1,112 +1,156 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="dark-mode">
+<h1>Dashboard</h1>
 
-<a href="https://github.com/GrossadmiralThrawn" target="_blank" class="button github-button">GitHub</a>
-<a th:href="@{/projects}" class="button projects-button">Projekte</a>
-
-<button id="modeToggle" class="moon-icon"></button>
-
-<h1>Software developer <br>Lukas Philipp Diettrich</h1>
-<br>
-<p class="intro-text" th:text="${introductionText.intro1}"></p>
-<p class="intro-text" th:text="${introductionText.intro2}"></p>
-
-<br>
-<br>
-<br>
-<br>
-
-<h2>Most important projects</h2>
-<br>
-<br>
-<h3 th:text="${websiteProjectDetails.title}"></h3>
-<br>
-<h4>Introduction</h4>
-<p class="intro-text" th:each="intro : ${websiteProjectDetails.introduction}" th:text="${intro}"></p>
-<br>
-<br>
-<br>
-<h4>Front-end</h4>
-<p class="intro-text">Android Studio offers a drag and drop GUI that allows you to drag and drop various UI elements onto a page internally known as an activity, where they are then arranged accordingly and can be customised to suit the project. Possible adjustments mainly concern the size, colour and possible text content. However, the number of customisation options is so large that anyone can use it to create their own very individual UI.</p>
-
-<div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.images}">
-    <img th:src="${image}" alt="Project image">
-    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
-    <hr class="divider" th:if="${!iterStat.last}">
+<div>
+    <h2>Systeminformationen</h2>
+    <canvas id="cpuChart" width="400" height="200"></canvas>
+    <canvas id="ramChart" width="400" height="200"></canvas>
 </div>
 
-<br>
-<br>
-
-<h4>Code</h4>
-<br>
-
-<p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
-<div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.codeSection.images}">
-    <img th:src="${image}" alt="Code snippet">
-    <hr class="divider" th:if="${!iterStat.last}">
+<div>
+    <h2>Statistiken</h2>
+    <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
 </div>
 
-<br>
-<br>
-<br>
-<br>
-
-<h3 th:text="${qrCodeAppDetails.title}"></h3>
-<br>
-<h4>Introduction</h4>
-<p class="intro-text" th:each="intro : ${qrCodeAppDetails.intro}" th:text="${intro}"></p>
-
-<div class="image-container-big" th:each="image, iterStat : ${qrCodeAppDetails.images}">
-    <img th:src="${image}" alt="Screenshot der QR-Code-App">
-    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
-    <hr class="divider" th:if="${!iterStat.last}">
-
-    <!-- Zusätzlicher Text nach dem siebten Bild -->
-    <div th:if="${iterStat.index == 6}">
-        <br>
-        <br>
-        <h4>Additional Information</h4>
-        <p class="intro-text" th:each="text : ${qrCodeAppDetails.additionalText}" th:text="${text}"></p>
-    </div>
+<div>
+    <h2>Aufrufe der letzten 7 Tage</h2>
+    <canvas id="requestChart" width="400" height="200"></canvas>
 </div>
 
-<br>
-<br>
-<br>
-<br>
+<!-- Der Button hat jetzt eine spezielle Klasse "dashboard-button" -->
+<button class="button button-large dashboard-button" onclick="window.location.href='/user/statistics'">Statistiken</button>
 
-<h2>More Projects and Networking</h2>
-<p class="intro-text">I hope I have been able to give you an interesting insight into my work. If you have any questions,
-    you can contact me <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" target="_blank">here</a> via my LinkedIn profile. Take also a look at some of my other projects. Otherwise, have a nice
-    day</p>
 <script>
-    const modeToggle = document.getElementById('modeToggle');
-    modeToggle.addEventListener('click', function() {
-        const body = document.body;
-        if (body.classList.contains('dark-mode')) {
-            body.classList.remove('dark-mode');
-            body.classList.add('light-mode');
-            modeToggle.classList.remove('moon-icon');
-            modeToggle.classList.add('sun-icon');
-        }
-        else {
-            body.classList.remove('light-mode');
-            body.classList.add('dark-mode');
-            modeToggle.classList.remove('sun-icon');
-            modeToggle.classList.add('moon-icon');
-        }
-    });
-</script>
+    let cpuChart, ramChart, requestChart;
 
+    $(document).ready(function() {
+        const ctxCpu = document.getElementById('cpuChart').getContext('2d');
+        cpuChart = new Chart(ctxCpu, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'CPU-Auslastung (%)',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+
+        const ctxRam = document.getElementById('ramChart').getContext('2d');
+        ramChart = new Chart(ctxRam, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'RAM-Auslastung (%)',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+
+        const ctxRequest = document.getElementById('requestChart').getContext('2d');
+        requestChart = new Chart(ctxRequest, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Anzahl der Aufrufe',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                if (Number.isInteger(value)) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        setInterval(fetchAndUpdateSystemData, 600);
+
+        fetchAndDisplayRequestData();
+    });
+
+    function fetchAndUpdateSystemData() {
+        $.ajax({
+            url: '/user/systemData',
+            method: 'GET',
+            success: function(data) {
+                const currentTime = new Date().toLocaleTimeString();
+
+                if (cpuChart.data.labels.length >= 10) {
+                    cpuChart.data.labels.shift();
+                    cpuChart.data.datasets[0].data.shift();
+                }
+                cpuChart.data.labels.push(currentTime);
+                cpuChart.data.datasets[0].data.push(data.cpuUsage);
+                cpuChart.update();
+
+                if (ramChart.data.labels.length >= 10) {
+                    ramChart.data.labels.shift();
+                    ramChart.data.datasets[0].data.shift();
+                }
+                ramChart.data.labels.push(currentTime);
+                ramChart.data.datasets[0].data.push(data.ramUsage);
+                ramChart.update();
+            }
+        });
+    }
+
+    function fetchAndDisplayRequestData() {
+        $.ajax({
+            url: '/user/statisticsData',
+            method: 'GET',
+            success: function(data) {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                requestChart.data.labels = labels;
+                requestChart.data.datasets[0].data = values;
+                requestChart.update();
+            }
+        });
+    }
+</script>
 </body>
 </html>

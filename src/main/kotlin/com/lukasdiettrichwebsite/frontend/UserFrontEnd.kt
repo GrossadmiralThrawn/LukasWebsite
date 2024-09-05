@@ -16,19 +16,34 @@ import org.springframework.web.bind.annotation.ResponseBody
 @Controller
 class UserFrontEnd(
     private val statisticsService: StatisticsService,
-    private val userService: UserService
-) {
-
+    private val userService: UserService)
+{
     @GetMapping("/user/login")
     fun login(): String {
         return "Login"
     }
+
+
+
     @GetMapping("/user/dashboard")
     fun dashboard(model: Model): String {
         val lastWeekStatistics = statisticsService.getLastWeekStatistics()
         model.addAttribute("lastWeekStatistics", lastWeekStatistics)
         return "Dashboard"
     }
+
+
+
+
+
+    @GetMapping("/user/statisticsData")
+    @ResponseBody
+    fun getStatisticsData(): Map<String, Long> {
+        return statisticsService.getLastWeekStatisticsByInterval()
+    }
+
+
+
 
     // Neuer Endpunkt, der CPU- und RAM-Auslastung als JSON zurückgibt
     @GetMapping("/user/systemData")

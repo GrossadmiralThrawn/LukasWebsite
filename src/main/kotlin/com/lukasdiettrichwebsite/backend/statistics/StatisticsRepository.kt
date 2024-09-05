@@ -10,4 +10,5 @@ import java.time.LocalDateTime
 interface StatisticsRepository: CrudRepository<StatisticsData, ULong> {
     fun findBySessionIdAndUrl(id: String, userId: String): StatisticsData?
     fun findAllByStartTimeAfter(startTime: LocalDateTime): List<StatisticsData>
+    fun findAllByStartTimeBetween(start: LocalDateTime, end: LocalDateTime): List<StatisticsData>
 }

@@ -1,43 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Metadaten des Dokuments -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
+  <!-- Verknüpfung mit der externen CSS-Datei -->
   <link rel="stylesheet" th:href="@{/styles.css}">
+  <!-- Einbindung von Chart.js für Diagramme -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Einbindung von jQuery für einfaches Arbeiten mit AJAX -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="dark-mode">
+<!-- Titel des Dashboards -->
 <h1>Dashboard</h1>
 
+<!-- Systeminformationen mit CPU und RAM-Auslastung -->
 <div>
   <h2>Systeminformationen</h2>
+  <!-- Canvas-Elemente für die Diagramme -->
   <canvas id="cpuChart" width="400" height="200"></canvas>
   <canvas id="ramChart" width="400" height="200"></canvas>
 </div>
 
+<!-- Bereich für Statistiken -->
 <div>
   <h2>Statistiken</h2>
+  <!-- Anzeige der Anzahl der Aufrufe in der letzten Woche -->
   <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
 </div>
 
+<!-- Bereich für die Aufrufstatistiken der letzten 7 Tage -->
+<div>
+  <h2>Aufrufe der letzten 7 Tage</h2>
+  <!-- Canvas-Element für das Aufrufe-Diagramm -->
+  <canvas id="requestChart" width="400" height="200"></canvas>
+</div>
+
+<!-- Button, um zur Statistikseite zu gelangen -->
 <button class="button button-large" onclick="window.location.href='/user/statistics'">Statistiken</button>
 
+<!-- Skripte für die Diagramme und Datenaktualisierungen -->
 <script>
-  // Diagramme initialisieren
-  let cpuChart, ramChart;
+  let cpuChart, ramChart, requestChart;
 
   $(document).ready(function() {
-    // Initiale Diagramm-Konfiguration für CPU
+    // Initiale Diagramm-Konfiguration für CPU-Auslastung
     const ctxCpu = document.getElementById('cpuChart').getContext('2d');
     cpuChart = new Chart(ctxCpu, {
       type: 'line',
       data: {
-        labels: [], // Zeitstempel
+        labels: [], // Zeitstempel für die x-Achse
         datasets: [{
           label: 'CPU-Auslastung (%)',
-          data: [], // CPU-Daten
+          data: [], // CPU-Daten (y-Achse)
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
@@ -46,12 +63,12 @@
       },
       options: {
         scales: {
-          y: { beginAtZero: true, max: 100 }
+          y: { beginAtZero: true, max: 100 } // y-Achse: CPU-Auslastung in %
         }
       }
     });
 
-    // Initiale Diagramm-Konfiguration für RAM
+    // Initiale Diagramm-Konfiguration für RAM-Auslastung
     const ctxRam = document.getElementById('ramChart').getContext('2d');
     ramChart = new Chart(ctxRam, {
       type: 'line',
@@ -68,16 +85,51 @@
       },
       options: {
         scales: {
-          y: { beginAtZero: true, max: 100 }
+          y: { beginAtZero: true, max: 100 } // y-Achse: RAM-Auslastung in %
         }
       }
     });
 
-    // Periodische Aktualisierung der Diagramme
-    setInterval(fetchAndUpdateData, 5000); // Alle 5 Sekunden
+    // Initiale Konfiguration für das Aufrufe-Diagramm (Balkendiagramm)
+    const ctxRequest = document.getElementById('requestChart').getContext('2d');
+    requestChart = new Chart(ctxRequest, {
+      type: 'bar',
+      data: {
+        labels: [], // Zeitintervalle (6-Stunden-Intervalle)
+        datasets: [{
+          label: 'Anzahl der Aufrufe',
+          data: [], // Aufruf-Zahlen
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1, // Schrittgröße auf Ganzzahlen setzen
+              callback: function(value) {
+                if (Number.isInteger(value)) {
+                  return value;  // Nur ganze Zahlen anzeigen
+                }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Periodische Aktualisierung der CPU- und RAM-Daten
+    setInterval(fetchAndUpdateSystemData, 600); // Alle 600 Millisekunden
+
+    // Aufruf-Daten für die letzten 7 Tage abfragen und das Diagramm aktualisieren
+    fetchAndDisplayRequestData();
   });
 
-  function fetchAndUpdateData() {
+  // Funktion zum Abrufen und Aktualisieren der CPU- und RAM-Daten
+  function fetchAndUpdateSystemData() {
     $.ajax({
       url: '/user/systemData',
       method: 'GET',
@@ -101,6 +153,23 @@
         ramChart.data.labels.push(currentTime);
         ramChart.data.datasets[0].data.push(data.ramUsage);
         ramChart.update();
+      }
+    });
+  }
+
+  // Funktion zum Abrufen und Anzeigen der Aufruf-Daten
+  function fetchAndDisplayRequestData() {
+    $.ajax({
+      url: '/user/statisticsData',
+      method: 'GET',
+      success: function(data) {
+        const labels = Object.keys(data);  // Zeitintervalle (6 Stunden)
+        const values = Object.values(data);  // Aufruf-Zahlen
+
+        // Aktualisiere das Aufrufe-Diagramm mit den neuen Daten
+        requestChart.data.labels = labels;
+        requestChart.data.datasets[0].data = values;
+        requestChart.update();
       }
     });
   }

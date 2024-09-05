@@ -2,26 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
   <title>Login</title>
-  <!-- Verwende th:href anstelle von href für korrekten Pfad -->
   <link rel="stylesheet" th:href="@{/styles.css}">
 </head>
 <body class="dark-mode">
 <div class="form-container">
-  <h1 class="login-title">Login</h1>
-  <br>
-  <form th:action="@{/user/login}" method="post">
-    <div class="input-container"> <!-- Wrapper für Eingabefelder -->
-      <label for="username" style="font-size: 2.5em;">Username:</label>
-      <input type="text" id="username" name="username" class="input-field" />
+  <h1>Login</h1> <!-- Ähnliche Überschrift wie in "Passwort ändern" -->
+
+  <form th:action="@{/user/login}" method="post" class="form-content"> <!-- Gleiche Form-Struktur -->
+    <div class="input-container">
+      <label for="username">Username</label> <!-- Standard-Label ohne inline-Styling -->
+      <input type="text" id="username" name="username" class="input-field" required /> <!-- Required hinzufügen -->
     </div>
     <div class="input-container">
-      <label for="password" style="font-size: 2.5em;">Password:</label>
-      <input type="password" id="password" name="password" class="input-field" />
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="input-field" required />
     </div>
-    <div>
-      <button type="submit" class="button button-large">Login</button>
-    </div>
+    <button type="submit" class="button button-large">Login</button> <!-- Gleicher Button-Stil -->
   </form>
+
+  <!-- Platz für Fehlermeldungen wie in der anderen Vorlage -->
+  <div th:if="${error}">
+    <p class="error-message" th:text="${error}"></p>
+  </div>
+  <div th:if="${success}">
+    <p class="success-message" th:text="${success}"></p>
+  </div>
 </div>
 </body>
 </html>

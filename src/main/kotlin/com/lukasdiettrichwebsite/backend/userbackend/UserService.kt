@@ -1,16 +1,21 @@
 package com.lukasdiettrichwebsite.backend.userbackend
 
+
+
+
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
+
+
+
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder // Injektion des Encoders
-) : UserDetailsService {
+    private val passwordEncoder: PasswordEncoder) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user = userRepository.findByUsername(username)
@@ -20,6 +25,9 @@ class UserService(
             user.username, user.password, emptyList()
         )
     }
+
+
+
 
     fun changePassword(userName: String, oldPassword: String, newPassword: String): Boolean {
         val user = userRepository.findByUsername(userName) ?: return false

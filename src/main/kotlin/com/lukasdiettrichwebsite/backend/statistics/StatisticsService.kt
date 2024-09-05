@@ -11,6 +11,8 @@ import oshi.hardware.GlobalMemory
 import java.lang.management.ManagementFactory
 import java.text.NumberFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -33,14 +35,26 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
 
 
 
-    /*fun getCpuUsageOverTime(): Double {
-        val prevTicks = processor.systemCpuLoadTicks
-        Thread.sleep(1000) // Eine Sekunde warten
-        val currentTicks = processor.systemCpuLoadTicks
-        val cpuLoad = processor.getSystemCpuLoadBetweenTicks(prevTicks, currentTicks) * 100
-        return String.format("%.2f", cpuLoad).toDouble()
-    }*/
+    fun getLastWeekStatisticsByInterval(): Map<String, Long> {
+        val now = LocalDateTime.now()
+        val oneWeekAgo = now.minusDays(7)
 
+        // List of intervals (6 hours) and their corresponding counts
+        val intervals = mutableMapOf<String, Long>()
+
+        // Loop through each 6-hour period in the last 7 days
+        for (i in 0..27) {
+            val start = oneWeekAgo.plus(i * 6L, ChronoUnit.HOURS)
+            val end = start.plus(6, ChronoUnit.HOURS)
+            val count = statisticsDataRepository.findAllByStartTimeBetween(start, end).size.toLong()
+
+            // Create label for this interval, e.g., "2023-09-01 00:00 - 06:00"
+            val label = "${start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))} - ${end.format(DateTimeFormatter.ofPattern("HH:mm"))}"
+            intervals[label] = count
+        }
+
+        return intervals
+    }
 
 
 
