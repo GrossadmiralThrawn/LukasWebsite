@@ -10,8 +10,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-
-
+import org.springframework.web.bind.annotation.ResponseBody
 
 
 @Controller
@@ -24,10 +23,20 @@ class UserFrontEnd(
     fun login(): String {
         return "Login"
     }
-
     @GetMapping("/user/dashboard")
-    fun dashboard(): String {
+    fun dashboard(model: Model): String {
+        val lastWeekStatistics = statisticsService.getLastWeekStatistics()
+        model.addAttribute("lastWeekStatistics", lastWeekStatistics)
         return "Dashboard"
+    }
+
+    // Neuer Endpunkt, der CPU- und RAM-Auslastung als JSON zurückgibt
+    @GetMapping("/user/systemData")
+    @ResponseBody
+    fun getSystemData(): Map<String, Double> {
+        val cpuUsage = statisticsService.getCpuUsage()
+        val ramUsage = statisticsService.getRamUsage()
+        return mapOf("cpuUsage" to cpuUsage, "ramUsage" to ramUsage)
     }
 
 

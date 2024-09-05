@@ -1,14 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <!-- Verwende th:href anstelle von href für korrekten Pfad -->
   <link rel="stylesheet" th:href="@{/styles.css}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="dark-mode">
 <h1>Dashboard</h1>
 
+<div>
+  <h2>Systeminformationen</h2>
+  <canvas id="cpuChart" width="400" height="200"></canvas>
+  <canvas id="ramChart" width="400" height="200"></canvas>
+</div>
+
+<div>
+  <h2>Statistiken</h2>
+  <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
+</div>
 
 <button class="button button-large" onclick="window.location.href='/user/statistics'">Statistiken</button>
+
+<script>
+  // Diagramme initialisieren
+  let cpuChart, ramChart;
+
+  $(document).ready(function() {
+    // Initiale Diagramm-Konfiguration für CPU
+    const ctxCpu = document.getElementById('cpuChart').getContext('2d');
+    cpuChart = new Chart(ctxCpu, {
+      type: 'line',
+      data: {
+        labels: [], // Zeitstempel
+        datasets: [{
+          label: 'CPU-Auslastung (%)',
+          data: [], // CPU-Daten
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          fill: true
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        }
+      }
+    });
+
+    // Initiale Diagramm-Konfiguration für RAM
+    const ctxRam = document.getElementById('ramChart').getContext('2d');
+    ramChart = new Chart(ctxRam, {
+      type: 'line',
+      data: {
+        labels: [], // Zeitstempel
+        datasets: [{
+          label: 'RAM-Auslastung (%)',
+          data: [], // RAM-Daten
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          fill: true
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        }
+      }
+    });
+
+    // Periodische Aktualisierung der Diagramme
+    setInterval(fetchAndUpdateData, 5000); // Alle 5 Sekunden
+  });
+
+  function fetchAndUpdateData() {
+    $.ajax({
+      url: '/user/systemData',
+      method: 'GET',
+      success: function(data) {
+        const currentTime = new Date().toLocaleTimeString();
+
+        // CPU-Daten aktualisieren
+        if (cpuChart.data.labels.length >= 10) {
+          cpuChart.data.labels.shift();
+          cpuChart.data.datasets[0].data.shift();
+        }
+        cpuChart.data.labels.push(currentTime);
+        cpuChart.data.datasets[0].data.push(data.cpuUsage);
+        cpuChart.update();
+
+        // RAM-Daten aktualisieren
+        if (ramChart.data.labels.length >= 10) {
+          ramChart.data.labels.shift();
+          ramChart.data.datasets[0].data.shift();
+        }
+        ramChart.data.labels.push(currentTime);
+        ramChart.data.datasets[0].data.push(data.ramUsage);
+        ramChart.update();
+      }
+    });
+  }
+</script>
 </body>
 </html>
