@@ -13,6 +13,7 @@ body.light-mode {
 body {
     font-family: 'Fira Code', monospace;
     transition: background-color 0.3s, color 0.3s;
+    text-align: center; /* Zentriert den gesamten Text */
 }
 
 /* Formular-Container für zentriertes Layout */
@@ -68,12 +69,55 @@ body {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: background-color 0.3s;
 }
 
-.button:hover {
-    background-color: #34495e;
+/* GitHub-Button und Projekte-Button mit gleicher Höhe und fester Breite */
+.github-button,
+.projects-button {
+    height: 50px; /* Gleiche Höhe für beide Buttons */
+    width: auto; /* Automatische Breite für die Buttons */
+    display: inline-flex; /* Flexbox für beide Buttons, damit sie sich dem Inhalt anpassen */
+    align-items: center; /* Zentriert den Inhalt vertikal */
+    justify-content: center; /* Zentriert den Inhalt horizontal */
+    padding: 0 20px;
+    border: none;
+    background-color: #343344;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    text-decoration: none; /* Entfernt die Standard-Link-Dekoration */
+}
+
+/* Positionierung der Buttons */
+.github-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.projects-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+/* Hover-Effekt nur für Bilder */
+.image-container img:hover,
+.image-container-big img:hover {
     transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Entfernt den Hover-Effekt von Buttons */
+.github-button:hover,
+.projects-button:hover {
+    transform: none; /* Entfernt die Skalierung */
+    background-color: #34495e;
 }
 
 /* Große Button-Stile */
@@ -83,11 +127,48 @@ body {
     border-radius: 10px;
 }
 
-/* Spezielle Stile nur für den Button im Dashboard */
-.dashboard-button {
-    position: relative;
-    right: -30px; /* Button nach rechts verschieben */
-    margin-top: 30px; /* Abstand nach unten */
+/* Bild-Container */
+.image-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.image-container img {
+    max-width: 90%; /* Verkleinert die Breite der Website-Bilder um 10% */
+    height: auto;
+    border-radius: 10px;
+    margin: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* App-Bild-Container */
+.image-container-big {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.image-container-big img {
+    max-width: 90%; /* Verkleinert die Breite der App-Bilder um 10% */
+    max-height: 90%; /* Verkleinert auch die Höhe der App-Bilder um 10% */
+    border-radius: 10px;
+    margin: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Trennstriche */
+.divider {
+    border: 1px solid #e0e0e0;
+    margin: 10px 0;
+    display: block;
+}
+
+/* Trennstriche, die nach dem letzten Bild vor einer neuen Überschrift nicht angezeigt werden */
+.no-divider-after {
+    display: none;
 }
 
 /* Fehler- und Erfolgsmeldungen */
@@ -136,39 +217,46 @@ body.dark-mode #modeToggle {
 }
 
 /* Überschriften-Stile */
-h1 {
+h1,
+h2,
+h3,
+h4,
+.intro-text {
     text-align: center;
     font-family: 'Fira Code', monospace;
+}
+
+/* Schriftgröße für normale Texte */
+.intro-text {
+    font-size: 1em; /* Gleiche Schriftgröße für normale Texte */
+}
+
+/* Überschrift-Stile */
+h1 {
     font-size: 3.5em;
     margin-top: 80px;
     margin-bottom: 20px;
 }
 
 h2 {
-    text-align: center;
-    font-family: 'Fira Code', monospace;
     font-size: 2.8em;
     margin-top: 40px;
     margin-bottom: 20px;
 }
 
 h3 {
-    text-align: center;
-    font-family: 'Fira Code', monospace;
     font-size: 2.24em;
     margin-top: 30px;
     margin-bottom: 15px;
 }
 
 h4 {
-    text-align: center;
-    font-family: 'Fira Code', monospace;
     font-size: 1.8em;
     margin-top: 20px;
     margin-bottom: 10px;
 }
 
-/* Bild-Container für das Dashboard */
+/* Bild-Container */
 .image-container {
     display: flex;
     flex-wrap: wrap;
@@ -177,20 +265,47 @@ h4 {
 }
 
 .image-container img {
-    max-width: 100%;
+    max-width: 90%; /* Verkleinert die Breite der Website-Bilder um 10% */
     height: auto;
     border-radius: 10px;
     margin: 5px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* App-Bild-Container */
+.image-container-big {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
 }
 
 .image-container-big img {
-    max-width: 100%;
-    height: auto;
+    max-width: 90%; /* Verkleinert die Breite der App-Bilder um 10% */
+    max-height: 90%; /* Verkleinert auch die Höhe der App-Bilder um 10% */
     border-radius: 10px;
     margin: 10px;
+    transition: transform 0.3s ease-in-out;
 }
 
 .divider {
     border: 1px solid #e0e0e0;
     margin: 10px 0;
+}
+
+/* Fehler- und Erfolgsmeldungen */
+.error-message {
+    color: red;
+    font-size: 1em;
+}
+
+.success-message {
+    color: green;
+    font-size: 1em;
+}
+
+/* Modus-Wechsel-Button */
+body.dark-mode #modeToggle {
+    background-color: #2c3e50;
+    color: #ecf0f1;
 }

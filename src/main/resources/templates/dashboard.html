@@ -1,19 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-  <!-- Metadaten des Dokuments -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard</title>
-  <!-- Verknüpfung mit der externen CSS-Datei -->
   <link rel="stylesheet" th:href="@{/styles.css}">
-  <!-- Einbindung von Chart.js für Diagramme -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Einbindung von jQuery für einfaches Arbeiten mit AJAX -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="dark-mode">
-<!-- Titel des Dashboards -->
 <h1>Dashboard</h1>
 
 <!-- Systeminformationen mit CPU und RAM-Auslastung -->
@@ -153,6 +148,9 @@
         ramChart.data.labels.push(currentTime);
         ramChart.data.datasets[0].data.push(data.ramUsage);
         ramChart.update();
+      },
+      error: function(xhr, status, error) {
+        console.error("Fehler beim Abrufen der Systemdaten:", status, error);
       }
     });
   }

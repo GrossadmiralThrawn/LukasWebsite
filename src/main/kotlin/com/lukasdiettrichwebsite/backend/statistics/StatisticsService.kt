@@ -1,20 +1,17 @@
 package com.lukasdiettrichwebsite.backend.statistics
 
-
-
-
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Service
 import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
 import oshi.hardware.GlobalMemory
 import java.lang.management.ManagementFactory
-import java.text.NumberFormat
+import javax.management.AttributeList
+import javax.management.MBeanServerConnection
+import javax.management.ObjectName
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.*
-
 
 @Service
 class StatisticsService(private val statisticsDataRepository: StatisticsRepository) {
@@ -22,18 +19,11 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
     private val processor: CentralProcessor = systemInfo.hardware.processor
     private val memory: GlobalMemory = systemInfo.hardware.memory
 
-
-
-
-
     // Methode, um die Anzahl der Aufrufe in den letzten 7 Tagen zu ermitteln
     fun getLastWeekStatistics(): Long {
         val oneWeekAgo = LocalDateTime.now().minusDays(7)
         return statisticsDataRepository.findAllByStartTimeAfter(oneWeekAgo).size.toLong()
     }
-
-
-
 
     fun getLastWeekStatisticsByInterval(): Map<String, Long> {
         val now = LocalDateTime.now()
@@ -56,20 +46,28 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
         return intervals
     }
 
-
-
-    // Method to calculate CPU usage
+    // Methode zur Berechnung der CPU-Auslastung
     fun getCpuUsage(): Double {
-        val cpuLoad = processor.getSystemCpuLoad(100)
-        // Format the CPU load based on the system locale
-        val locale = Locale.getDefault()  // or you can specify Locale.GERMANY if needed
-        val numberFormat = NumberFormat.getNumberInstance(locale)
+        return try {
+            val mbs: MBeanServerConnection = ManagementFactory.getPlatformMBeanServer()
+            val objectName = ObjectName("java.lang:type=OperatingSystem")
+            val attributes: AttributeList = mbs.getAttributes(objectName, arrayOf("SystemCpuLoad"))
 
-        // Format the number and parse it
-        val formattedCpuLoad = String.format(locale, "%.2f", cpuLoad)
-        return numberFormat.parse(formattedCpuLoad).toDouble()
+            // Überprüfe, ob Attribute vorhanden sind und ob das erste Attribut einen Wert hat
+            if (attributes.isEmpty()) {
+                return 0.0
+            }
+
+            val cpuLoadAttribute = attributes[0] as javax.management.Attribute
+            val cpuLoad = cpuLoadAttribute.value as Double
+
+            // `SystemCpuLoad` gibt die CPU-Auslastung als Prozentsatz von 0 bis 1 zurück
+            cpuLoad * 100
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0.0 // Im Fehlerfall 0% Auslastung zurückgeben
+        }
     }
-
 
 
     // Methode, um die RAM-Auslastung zu berechnen
@@ -79,9 +77,6 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
         val usedMemory = totalMemory - availableMemory
         return (usedMemory.toDouble() / totalMemory) * 100
     }
-
-
-
 
     fun recordStatistics(url: String, request: HttpServletRequest) {
         val ip = request.remoteAddr
@@ -100,9 +95,6 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
             statisticsDataRepository.save(statistics)
         }
     }
-
-
-
 
     fun getAllStatistics(): List<StatisticsData> {
         return statisticsDataRepository.findAll().toList()

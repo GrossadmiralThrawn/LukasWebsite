@@ -20,7 +20,7 @@ class UserFrontEnd(
 {
     @GetMapping("/user/login")
     fun login(): String {
-        return "Login"
+        return "login"
     }
 
 
@@ -29,7 +29,7 @@ class UserFrontEnd(
     fun dashboard(model: Model): String {
         val lastWeekStatistics = statisticsService.getLastWeekStatistics()
         model.addAttribute("lastWeekStatistics", lastWeekStatistics)
-        return "Dashboard"
+        return "dashboard"
     }
 
 

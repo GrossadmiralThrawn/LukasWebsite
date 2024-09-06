@@ -96,6 +96,9 @@ class GeneralUsageEndpoints (val statisticsService: StatisticsService) {
         return "index"
     }
 
+
+
+
     @GetMapping(path = ["/projects"])
     fun projects(model: Model, request: HttpServletRequest): String {
         statisticsService.recordStatistics("/", request)
