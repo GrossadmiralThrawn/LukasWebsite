@@ -14,23 +14,29 @@
 <!-- Systeminformationen mit CPU und RAM-Auslastung -->
 <div>
   <h2>Systeminformationen</h2>
-  <!-- Canvas-Elemente für die Diagramme -->
-  <canvas id="cpuChart" width="400" height="200"></canvas>
-  <canvas id="ramChart" width="400" height="200"></canvas>
+  <br>
+  <div class="chart-wrapper">
+    <!-- Canvas-Elemente für die Diagramme -->
+    <div class="chart-container">
+      <canvas id="cpuChart"></canvas>
+    </div>
+    <div class="chart-container">
+      <canvas id="ramChart"></canvas>
+    </div>
+  </div>
 </div>
 
-<!-- Bereich für Statistiken -->
-<div>
-  <h2>Statistiken</h2>
-  <!-- Anzeige der Anzahl der Aufrufe in der letzten Woche -->
-  <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
-</div>
+<br>
 
 <!-- Bereich für die Aufrufstatistiken der letzten 7 Tage -->
 <div>
   <h2>Aufrufe der letzten 7 Tage</h2>
   <!-- Canvas-Element für das Aufrufe-Diagramm -->
   <canvas id="requestChart" width="400" height="200"></canvas>
+</div>
+<div>
+  <!-- Anzeige der Anzahl der Aufrufe in der letzten Woche -->
+  <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
 </div>
 
 <!-- Button, um zur Statistikseite zu gelangen -->
@@ -39,6 +45,7 @@
 <!-- Skripte für die Diagramme und Datenaktualisierungen -->
 <script>
   let cpuChart, ramChart, requestChart;
+  const MAX_POINTS = 10; // Maximale Anzahl der Datenpunkte im Diagramm
 
   $(document).ready(function() {
     // Initiale Diagramm-Konfiguration für CPU-Auslastung
@@ -46,10 +53,10 @@
     cpuChart = new Chart(ctxCpu, {
       type: 'line',
       data: {
-        labels: [], // Zeitstempel für die x-Achse
+        labels: [],
         datasets: [{
           label: 'CPU-Auslastung (%)',
-          data: [], // CPU-Daten (y-Achse)
+          data: [],
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1,
@@ -58,7 +65,7 @@
       },
       options: {
         scales: {
-          y: { beginAtZero: true, max: 100 } // y-Achse: CPU-Auslastung in %
+          y: { beginAtZero: true, max: 100 }
         }
       }
     });
@@ -68,10 +75,10 @@
     ramChart = new Chart(ctxRam, {
       type: 'line',
       data: {
-        labels: [], // Zeitstempel
+        labels: [],
         datasets: [{
           label: 'RAM-Auslastung (%)',
-          data: [], // RAM-Daten
+          data: [],
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,
@@ -80,7 +87,7 @@
       },
       options: {
         scales: {
-          y: { beginAtZero: true, max: 100 } // y-Achse: RAM-Auslastung in %
+          y: { beginAtZero: true, max: 100 }
         }
       }
     });
@@ -90,10 +97,10 @@
     requestChart = new Chart(ctxRequest, {
       type: 'bar',
       data: {
-        labels: [], // Zeitintervalle (6-Stunden-Intervalle)
+        labels: [],
         datasets: [{
           label: 'Anzahl der Aufrufe',
-          data: [], // Aufruf-Zahlen
+          data: [],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1
@@ -104,10 +111,10 @@
           y: {
             beginAtZero: true,
             ticks: {
-              stepSize: 1, // Schrittgröße auf Ganzzahlen setzen
+              stepSize: 1,
               callback: function(value) {
                 if (Number.isInteger(value)) {
-                  return value;  // Nur ganze Zahlen anzeigen
+                  return value;
                 }
               }
             }
@@ -117,7 +124,7 @@
     });
 
     // Periodische Aktualisierung der CPU- und RAM-Daten
-    setInterval(fetchAndUpdateSystemData, 600); // Alle 600 Millisekunden
+    setInterval(fetchAndUpdateSystemData, 500); // Alle 500 Millisekunden
 
     // Aufruf-Daten für die letzten 7 Tage abfragen und das Diagramm aktualisieren
     fetchAndDisplayRequestData();
@@ -129,10 +136,11 @@
       url: '/user/systemData',
       method: 'GET',
       success: function(data) {
+        console.log("Daten empfangen:", data); // Debugging
         const currentTime = new Date().toLocaleTimeString();
 
         // CPU-Daten aktualisieren
-        if (cpuChart.data.labels.length >= 10) {
+        if (cpuChart.data.labels.length >= MAX_POINTS) {
           cpuChart.data.labels.shift();
           cpuChart.data.datasets[0].data.shift();
         }
@@ -141,7 +149,7 @@
         cpuChart.update();
 
         // RAM-Daten aktualisieren
-        if (ramChart.data.labels.length >= 10) {
+        if (ramChart.data.labels.length >= MAX_POINTS) {
           ramChart.data.labels.shift();
           ramChart.data.datasets[0].data.shift();
         }
@@ -161,8 +169,9 @@
       url: '/user/statisticsData',
       method: 'GET',
       success: function(data) {
-        const labels = Object.keys(data);  // Zeitintervalle (6 Stunden)
-        const values = Object.values(data);  // Aufruf-Zahlen
+        console.log("Aufruf-Daten empfangen:", data); // Debugging
+        const labels = Object.keys(data);
+        const values = Object.values(data);
 
         // Aktualisiere das Aufrufe-Diagramm mit den neuen Daten
         requestChart.data.labels = labels;

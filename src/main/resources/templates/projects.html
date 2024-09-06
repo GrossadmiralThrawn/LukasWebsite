@@ -9,6 +9,23 @@
 <body class = "dark-mode">
 <h1>Projects</h1>
 <h2>Introduction</h2>
+<h3 th:text="${qrCodeAppDetails.title}"></h3>
+<br>
+<h4>Introduction</h4>
+<p class="intro-text" th:each="intro : ${qrCodeAppDetails.intro}" th:text="${intro}"></p>
+
+<div class="image-container-big" th:each="image, iterStat : ${qrCodeAppDetails.images}">
+    <img th:src="${image}" alt="Screenshot der QR-Code-App">
+    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
+    <hr class="divider" th:if="${!iterStat.last}">
+    <!-- Zusätzlicher Text nach dem siebten Bild -->
+    <div th:if="${iterStat.index == 6}">
+        <br>
+        <br>
+        <h4>Additional Information</h4>
+        <p class="intro-text" th:each="text : ${qrCodeAppDetails.additionalText}" th:text="${text}"></p>
+    </div>
+</div>
 
 </body>
 </html>
