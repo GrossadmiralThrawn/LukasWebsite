@@ -61,6 +61,7 @@ body {
 }
 
 /* Allgemeine Button-Stile */
+/* Allgemeine Button-Stile */
 .button {
     padding: 10px 20px;
     border: none;
@@ -70,6 +71,19 @@ body {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+}
+
+/* Große Button-Stile */
+.button-large {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border-radius: 10px;
+}
+
+/* Neuer Stil für rechtsbündige Buttons */
+.right-aligned {
+    float: right; /* Rechtsbündige Ausrichtung */
+    margin-right: 20px; /* Abstand zum Rand */
 }
 
 /* GitHub-Button und Projekte-Button mit gleicher Höhe und fester Breite */
