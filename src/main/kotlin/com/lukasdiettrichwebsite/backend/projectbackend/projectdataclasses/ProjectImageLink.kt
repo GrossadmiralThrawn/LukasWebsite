@@ -26,5 +26,8 @@ data class ProjectImageLink(
     val image: ProjectImage,
 
     @Column(nullable = true)
-    val position: Int? = null // 'order' zu 'position' geändert
+    val position: Int? = null,
+
+    @Column(nullable = true)
+    val description: String? = null  // Beschreibung für das Bild
 )

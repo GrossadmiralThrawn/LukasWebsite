@@ -7,43 +7,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="dark-mode">
+
 <h1>Neues Projekt hinzufügen</h1>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <!-- Erfolg-/Fehlermeldungen anzeigen -->
 <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
 <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
 
-<!-- Formular zum Hinzufügen eines Projekts -->
 <div class="form-container">
-    <form class="form-content" action="/user/addProject" method="post" enctype="multipart/form-data"> <!-- Achte auf enctype="multipart/form-data" -->
+
+    <!-- Formular zum Hinzufügen eines Projekts -->
+    <form class="form-content" th:action="@{/addProject}" method="post" enctype="multipart/form-data">
+        <!-- CSRF-Token einfügen -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
         <div class="input-container">
             <label for="projectName">Projektname:</label>
-            <input class="input-field" type="text" id="projectName" name="projectName" required>
+            <input class="input-field" type="text" id="projectName" name="name" required>
         </div>
 
         <div class="input-container">
-            <label for="description">Beschreibung:</label>
+            <label for="description">Beschreibung (Einleitung):</label>
             <textarea class="input-field" id="description" name="description" rows="4" required></textarea>
         </div>
 
         <div class="input-container">
-            <label for="projectImage">Projektbild:</label>
-            <input class="input-field" type="file" id="projectImage" name="projectImage" accept="image/*" required> <!-- Typ ist jetzt "file" -->
+            <label for="projectImages">Projektbilder:</label>
+            <input class="input-field" type="file" id="projectImages" name="projectImages" accept="image/*" multiple>
         </div>
 
-        <div class="input-container">
-            <label for="projectText">Projekttext:</label>
-            <textarea class="input-field" id="projectText" name="projectText" rows="4"></textarea>
+        <div id="imageDescriptionsContainer">
+            <div class="input-container">
+                <label for="imageDescription1">Bildbeschreibung 1:</label>
+                <textarea class="input-field" id="imageDescription1" name="imageDescriptions" rows="2"></textarea>
+
+                <label for="imageOrder1">Bildreihenfolge 1:</label>
+                <input class="input-field" type="number" id="imageOrder1" name="imageOrders" min="1">
+            </div>
         </div>
 
+        <button type="button" id="addImageDescription" class="button">Weitere Bildbeschreibung hinzufügen</button>
+
         <div class="input-container">
-            <label for="order">Reihenfolge:</label>
-            <input class="input-field" type="number" id="order" name="order" min="1">
+            <label for="conclusionText">Abschlusstext:</label>
+            <textarea class="input-field" id="conclusionText" name="conclusionText" rows="4"></textarea>
         </div>
 
         <button type="submit" class="button button-large">Projekt hinzufügen</button>
     </form>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<script>
+    document.getElementById('addImageDescription').addEventListener('click', function() {
+        const container = document.getElementById('imageDescriptionsContainer');
+        const index = container.children.length + 1;
+        const newDescription = document.createElement('div');
+        newDescription.classList.add('input-container');
+        newDescription.innerHTML = `
+        <label for="imageDescription${index}">Bildbeschreibung ${index}:</label>
+        <textarea class="input-field" id="imageDescription${index}" name="imageDescriptions" rows="2"></textarea>
+
+        <label for="imageOrder${index}">Bildreihenfolge ${index}:</label>
+        <input class="input-field" type="number" id="imageOrder${index}" name="imageOrders" min="1">
+        `;
+        container.appendChild(newDescription);
+    });
+</script>
 
 </body>
 </html>

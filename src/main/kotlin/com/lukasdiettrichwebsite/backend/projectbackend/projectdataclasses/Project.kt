@@ -7,6 +7,8 @@ import jakarta.persistence.*
 import com.fasterxml.jackson.annotation.JsonManagedReference
 
 
+
+
 @Entity
 @Table(name = "projects")
 data class Project(
@@ -18,7 +20,7 @@ data class Project(
     val name: String,
 
     @Column(nullable = true)
-    val description: String? = null,
+    val description: String? = null,  // Einleitung
 
     @OneToMany(mappedBy = "project", cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
@@ -26,5 +28,8 @@ data class Project(
 
     @OneToMany(mappedBy = "project", cascade = [CascadeType.ALL], orphanRemoval = true)
     @JsonManagedReference
-    val imageLinks: MutableList<ProjectImageLink> = mutableListOf()
+    val imageLinks: MutableList<ProjectImageLink> = mutableListOf(),
+
+    @Column(nullable = true)
+    var conclusionText: String? = null  // Abschlusstext
 )

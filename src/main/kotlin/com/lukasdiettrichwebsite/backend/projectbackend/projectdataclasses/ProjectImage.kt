@@ -6,6 +6,9 @@ package com.lukasdiettrichwebsite.backend.projectbackend.projectdataclasses
 
 import jakarta.persistence.*
 
+
+
+
 @Entity
 @Table(name = "project_images")
 data class ProjectImage(
@@ -13,10 +16,12 @@ data class ProjectImage(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(nullable = false)
     @Lob
+    @Column(nullable = false)
     val projectImage: ByteArray,  // Speichert das Bild als BLOB
 
     @Column(nullable = true)
-    val description: String? = null
+    val description: String? = null,
+
+    var position: Short
 )
