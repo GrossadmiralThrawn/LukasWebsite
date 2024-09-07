@@ -14,7 +14,8 @@ data class ProjectImage(
     val id: Long = 0,
 
     @Column(nullable = false)
-    val imagePath: String,
+    @Lob
+    val projectImage: ByteArray,  // Speichert das Bild als BLOB
 
     @Column(nullable = true)
     val description: String? = null
