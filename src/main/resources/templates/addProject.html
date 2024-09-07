@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Projekt hinzufügen</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="dark-mode">
+<h1>Neues Projekt hinzufügen</h1>
+
+<!-- Erfolg-/Fehlermeldungen anzeigen -->
+<div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+<div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+
+<!-- Formular zum Hinzufügen eines Projekts -->
+<div class="form-container">
+    <form class="form-content" action="/user/addProject" method="post" enctype="multipart/form-data"> <!-- Achte auf enctype="multipart/form-data" -->
+        <div class="input-container">
+            <label for="projectName">Projektname:</label>
+            <input class="input-field" type="text" id="projectName" name="projectName" required>
+        </div>
+
+        <div class="input-container">
+            <label for="description">Beschreibung:</label>
+            <textarea class="input-field" id="description" name="description" rows="4" required></textarea>
+        </div>
+
+        <div class="input-container">
+            <label for="projectImage">Projektbild:</label>
+            <input class="input-field" type="file" id="projectImage" name="projectImage" accept="image/*" required> <!-- Typ ist jetzt "file" -->
+        </div>
+
+        <div class="input-container">
+            <label for="projectText">Projekttext:</label>
+            <textarea class="input-field" id="projectText" name="projectText" rows="4"></textarea>
+        </div>
+
+        <div class="input-container">
+            <label for="order">Reihenfolge:</label>
+            <input class="input-field" type="number" id="order" name="order" min="1">
+        </div>
+
+        <button type="submit" class="button button-large">Projekt hinzufügen</button>
+    </form>
+</div>
+
+</body>
+</html>

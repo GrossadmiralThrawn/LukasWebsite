@@ -3,6 +3,8 @@ package com.lukasdiettrichwebsite.frontend
 
 
 
+import com.lukasdiettrichwebsite.backend.projectbackend.ProjectService
+import com.lukasdiettrichwebsite.backend.projectbackend.projectdataclasses.Project
 import com.lukasdiettrichwebsite.backend.statistics.StatisticsService
 import com.lukasdiettrichwebsite.backend.userbackend.UserService
 import org.springframework.stereotype.Controller
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 
 @Controller
 class UserFrontEnd(
     private val statisticsService: StatisticsService,
-    private val userService: UserService)
+    private val userService: UserService,
+    private val projectService: ProjectService)
 {
     @GetMapping("/user/login")
     fun login(): String {
@@ -112,6 +116,32 @@ class UserFrontEnd(
     @GetMapping("/user/logout")
     fun logout(): String {
         return "redirect:/user/login"
+    }
+
+
+
+
+    @GetMapping ("/user/addProject")
+    fun addProject(): String
+    {
+        return "addProject"
+    }
+
+
+
+
+    @PostMapping("/addProject")
+    fun addProject(
+        @ModelAttribute project: Project,
+        redirectAttributes: RedirectAttributes
+    ): String {
+        try {
+            projectService.createProject(project)
+            redirectAttributes.addFlashAttribute("successMessage", "Projekt erfolgreich hinzugefügt!")
+        } catch (e: Exception) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Fehler beim Hinzufügen des Projekts!")
+        }
+        return "redirect:/user/addProject"
     }
 }
 

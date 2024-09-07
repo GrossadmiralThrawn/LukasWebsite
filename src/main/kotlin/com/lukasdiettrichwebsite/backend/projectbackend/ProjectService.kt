@@ -23,17 +23,17 @@ class ProjectService(
         return projectRepository.save(project)
     }
 
-    fun addTextToProject(projectId: Long, text: ProjectText, order: Int? = null): ProjectTextLink {
+    fun addTextToProject(projectId: Long, text: ProjectText, position: Int? = null): ProjectTextLink {
         val project = projectRepository.findById(projectId).orElseThrow { Exception("Project not found") }
         val savedText = projectTextRepository.save(text)
-        val link = ProjectTextLink(project = project, text = savedText, order = order)
+        val link = ProjectTextLink(project = project, text = savedText, position = position)
         return projectTextLinkRepository.save(link)
     }
 
-    fun addImageToProject(projectId: Long, image: ProjectImage, order: Int? = null): ProjectImageLink {
+    fun addImageToProject(projectId: Long, image: ProjectImage, position: Int? = null): ProjectImageLink {
         val project = projectRepository.findById(projectId).orElseThrow { Exception("Project not found") }
         val savedImage = projectImageRepository.save(image)
-        val link = ProjectImageLink(project = project, image = savedImage, order = order)
+        val link = ProjectImageLink(project = project, image = savedImage, position = position)
         return projectImageLinkRepository.save(link)
     }
 
