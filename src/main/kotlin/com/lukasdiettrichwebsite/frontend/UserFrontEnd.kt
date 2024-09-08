@@ -120,7 +120,7 @@ class UserFrontEnd(
                     val imageDescription = imageDescriptions.getOrNull(index)
 
                     // Default-Reihenfolge, falls keine Reihenfolge angegeben wurde
-                    val imageOrder = imageOrders?.getOrNull(index)?.takeIf { it > 0 } ?: index + 1
+                    val imageOrder = imageOrders?.getOrNull(index)?.takeIf { it > 0 } ?: (index + 1)
 
                     // Erstellen eines ProjectImage-Objekts
                     val image = ProjectImage(
