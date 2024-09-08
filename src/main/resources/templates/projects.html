@@ -1,31 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Projects</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap">
 </head>
-<body class = "dark-mode">
+<body class="dark-mode">
 <h1>Projects</h1>
-<h2>Introduction</h2>
-<h3 th:text="${qrCodeAppDetails.title}"></h3>
-<br>
-<h4>Introduction</h4>
-<p class="intro-text" th:each="intro : ${qrCodeAppDetails.intro}" th:text="${intro}"></p>
+<!-- Mode Toggle Button -->
+<button id="modeToggle" class="moon-icon"></button>
 
-<div class="image-container-big" th:each="image, iterStat : ${qrCodeAppDetails.images}">
-    <img th:src="${image}" alt="Screenshot der QR-Code-App">
-    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
-    <hr class="divider" th:if="${!iterStat.last}">
-    <!-- Zusätzlicher Text nach dem siebten Bild -->
-    <div th:if="${iterStat.index == 6}">
-        <br>
-        <br>
-        <h4>Additional Information</h4>
-        <p class="intro-text" th:each="text : ${qrCodeAppDetails.additionalText}" th:text="${text}"></p>
+<!-- Fehlernachricht anzeigen -->
+<div th:if="${errorMessage}">
+    <p class="error-message" th:text="${errorMessage}"></p>
+</div>
+
+<!-- Projekte anzeigen -->
+<div th:each="project : ${projects}">
+    <!-- Projektname -->
+    <h3 th:text="${project.name}"></h3>
+
+    <!-- Projektbeschreibung -->
+    <h4>Project description</h4>
+    <p th:text="${project.description}"></p>
+
+    <!-- Bilder und Beschreibungen anzeigen -->
+    <div class="image-container-big" th:each="imageLink, iterStat : ${project.imageLinks}">
+        <img th:src="@{'/images/' + ${imageLink.image.id}}" th:alt="${imageLink.description}" />
+
+        <!-- Bildbeschreibung unter dem Bild -->
+        <p th:text="${imageLink.description}"></p>
+
+        <!-- Divider, wenn es nicht das letzte Bild ist -->
+        <hr class="divider" th:if="${!iterStat.last}">
+    </div>
+
+    <h4></h4>
+    <!-- Abschlusstext anzeigen -->
+    <div th:if="${project.conclusionText}">
+        <p class="intro-text" th:text="${project.conclusionText}"></p>
     </div>
 </div>
 
+
+<script>
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle.addEventListener('click', function() {
+        const body = document.body;
+        if (body.classList.contains('dark-mode')) {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            modeToggle.classList.remove('moon-icon');
+            modeToggle.classList.add('sun-icon');
+        } else {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            modeToggle.classList.remove('sun-icon');
+            modeToggle.classList.add('moon-icon');
+        }
+    });
+</script>
 </body>
 </html>

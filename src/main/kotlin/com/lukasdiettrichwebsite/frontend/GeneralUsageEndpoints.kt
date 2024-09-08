@@ -1,17 +1,25 @@
 package com.lukasdiettrichwebsite.frontend
 
+import com.lukasdiettrichwebsite.backend.projectbackend.ProjectService
+import com.lukasdiettrichwebsite.backend.projectbackend.projectRepositorys.ProjectImageRepository
 import com.lukasdiettrichwebsite.backend.statistics.StatisticsService
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.core.io.ByteArrayResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 
 
 
 @Controller
-class GeneralUsageEndpoints (val statisticsService: StatisticsService) {
-    @GetMapping
+class GeneralUsageEndpoints (private val statisticsService: StatisticsService, private val projectImageRepository: ProjectImageRepository, private val projectService: ProjectService) {
+    @GetMapping("/")
     fun aboutMe(model: Model, request: HttpServletRequest): String {
         statisticsService.recordStatistics("/", request)
         val introductionText = mapOf(
@@ -52,6 +60,7 @@ class GeneralUsageEndpoints (val statisticsService: StatisticsService) {
                 "/images/WebsiteProjekt2.jpeg",
                 "/images/WebsiteProjekt3LightMode.jpeg",
                 "/images/WebsiteProjekt4Code1HTML.jpeg",
+                "/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg",
                 "/images/WebsiteProjekt5CodePrimaereEndpunktdateiKotlin.jpeg"
             ),
             "codeSection" to mapOf(
@@ -99,10 +108,28 @@ class GeneralUsageEndpoints (val statisticsService: StatisticsService) {
 
 
 
-    @GetMapping(path = ["/projects"])
-    fun projects(model: Model, request: HttpServletRequest): String {
-        statisticsService.recordStatistics("/", request)
 
+
+    @GetMapping("/projects")
+    fun getAllProjects(model: Model): String {
+        val projects = projectService.getAllProjects()
+        if (projects.isEmpty()) {
+            model.addAttribute("errorMessage", "No projects found.")
+        } else {
+            model.addAttribute("projects", projects)
+        }
         return "projects"
+    }
+
+    @GetMapping("/images/{id}")
+    fun getImage(@PathVariable id: Long): ResponseEntity<Resource> {
+        val projectImage = projectImageRepository.findById(id).orElseThrow { Exception("Image not found") }
+        val imageBytes = projectImage.projectImage
+        val resource = ByteArrayResource(imageBytes)
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_JPEG) // Ändere dies je nach Bildtyp
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"image-$id.jpeg\"")
+            .body(resource)
     }
 }

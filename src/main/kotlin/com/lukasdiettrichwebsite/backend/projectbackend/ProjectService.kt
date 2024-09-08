@@ -45,4 +45,11 @@ class ProjectService(
     fun getProjectById(projectId: Long): Project {
         return projectRepository.findById(projectId).orElseThrow { Exception("Project not found") }
     }
+
+
+
+
+    fun getAllProjects(): List<Project> {
+        return projectRepository.findAll()  // Retrieves all projects
+    }
 }

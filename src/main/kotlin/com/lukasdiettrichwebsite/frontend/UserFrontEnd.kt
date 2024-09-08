@@ -1,5 +1,8 @@
 package com.lukasdiettrichwebsite.frontend
 
+
+
+
 import com.lukasdiettrichwebsite.backend.projectbackend.ProjectService
 import com.lukasdiettrichwebsite.backend.projectbackend.projectdataclasses.Project
 import com.lukasdiettrichwebsite.backend.projectbackend.projectdataclasses.ProjectImage
@@ -11,12 +14,33 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
+
+
+
 @Controller
 class UserFrontEnd(
     private val statisticsService: StatisticsService,
     private val userService: UserService,
     private val projectService: ProjectService
 ) {
+    @GetMapping("/user")
+    fun user(model: Model): String {
+        return "redirect:/user/dashboard"
+    }
+
+
+
+
+
+    @GetMapping("/user/")
+    fun user2(model: Model): String {
+        return "redirect:/user/dashboard"
+    }
+
+
+
+
+
 
     @GetMapping("/user/login")
     fun login(): String {

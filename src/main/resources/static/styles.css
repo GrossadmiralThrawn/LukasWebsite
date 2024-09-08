@@ -286,25 +286,28 @@ h4 {
     transition: transform 0.3s ease-in-out;
 }
 
-/* App-Bild-Container */
+/* Bild-Container */
 .image-container-big {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column; /* Stellen Sie sicher, dass die Kinder-Elemente in einer Spalte angeordnet werden */
+    align-items: center; /* Zentriert die Kinder-Elemente horizontal */
     margin: 20px 0;
 }
 
+/* Bilder */
 .image-container-big img {
-    max-width: 90%; /* Verkleinert die Breite der App-Bilder um 10% */
-    max-height: 90%; /* Verkleinert auch die Höhe der App-Bilder um 10% */
+    max-width: 90%; /* Verkleinert die Breite der Bilder */
+    height: auto;
     border-radius: 10px;
-    margin: 10px;
+    margin-bottom: 10px; /* Abstand unter dem Bild */
     transition: transform 0.3s ease-in-out;
 }
 
+/* Trennstriche */
 .divider {
     border: 1px solid #e0e0e0;
     margin: 10px 0;
+    width: 100%; /* Vollständige Breite des Containers */
 }
 
 /* Fehler- und Erfolgsmeldungen */
@@ -343,4 +346,69 @@ body.dark-mode #modeToggle {
 canvas {
     width: 100% !important; /* Skaliert das Canvas auf die Container-Breite */
     height: auto !important; /* Beibehaltung des Seitenverhältnisses */
+}
+
+/* Großer Bild-Container für größere oder hervorhebende Bilder */
+.image-container-large {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.image-container-large img {
+    max-width: 90%; /* Verkleinert die Breite der Bilder um 10% */
+    height: auto;
+    border-radius: 10px;
+    margin: 10px; /* Etwas mehr Abstand zwischen den Bildern */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Bild-Container für kleinere Bilder oder Details */
+.image-container-small {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.image-container-small img {
+    max-width: 80%; /* Verkleinert die Breite der Bilder um 20% */
+    height: auto;
+    border-radius: 8px;
+    margin: 8px; /* Weniger Abstand zwischen den Bildern */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Bild-Container für Bilder, die in einer Zeile angezeigt werden sollen */
+.image-container-inline {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.image-container-inline img {
+    max-width: 100%; /* Bilder sollen die volle Breite des Containers nutzen */
+    height: auto;
+    border-radius: 5px;
+    margin: 5px; /* Etwas Abstand zwischen den Bildern */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Container für große Bilder, die als Hauptfokus fungieren */
+.image-container-primary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.image-container-primary img {
+    max-width: 90%; /* Bilder werden um 10% verkleinert */
+    height: auto;
+    border-radius: 12px;
+    margin-bottom: 20px; /* Großer Abstand unter jedem Bild */
+    transition: transform 0.3s ease-in-out;
 }
