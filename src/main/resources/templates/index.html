@@ -10,13 +10,9 @@
 </head>
 <body class="dark-mode">
 
-<!-- GitHub Button -->
 <a href="https://github.com/GrossadmiralThrawn" target="_blank" class="button github-button">GitHub</a>
-
-<!-- Projects Button -->
 <a th:href="@{/projects}" class="button projects-button">Projekte</a>
 
-<!-- Mode Toggle Button -->
 <button id="modeToggle" class="moon-icon"></button>
 
 <h1>Software developer <br>Lukas Philipp Diettrich</h1>
@@ -57,6 +53,7 @@
 <p class="intro-text" th:text="${websiteProjectDetails.codeSection.intro}"></p>
 <div class="image-container" th:each="image, iterStat : ${websiteProjectDetails.codeSection.images}">
     <img th:src="${image}" alt="Code snippet">
+    <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
     <hr class="divider" th:if="${!iterStat.last}">
 </div>
 
@@ -74,6 +71,7 @@
     <img th:src="${image}" alt="Screenshot der QR-Code-App">
     <!-- Trennstrich nur anzeigen, wenn es nicht das letzte Bild ist -->
     <hr class="divider" th:if="${!iterStat.last}">
+
     <!-- Zusätzlicher Text nach dem siebten Bild -->
     <div th:if="${iterStat.index == 6}">
         <br>
@@ -88,11 +86,6 @@
 <br>
 <br>
 
-<h2>More Projects and Networking</h2>
-<p class="intro-text">I hope I have been able to give you an interesting insight into my work. If you have any questions,
-    you can contact me <a href="https://www.linkedin.com/in/lukas-philipp-diettrich-313406226/" target="_blank">here</a> via my LinkedIn profile. Take also a look at some of my other projects. Otherwise, have a nice
-    day</p>
-
 <script>
     const modeToggle = document.getElementById('modeToggle');
     modeToggle.addEventListener('click', function() {
@@ -102,7 +95,8 @@
             body.classList.add('light-mode');
             modeToggle.classList.remove('moon-icon');
             modeToggle.classList.add('sun-icon');
-        } else {
+        }
+        else {
             body.classList.remove('light-mode');
             body.classList.add('dark-mode');
             modeToggle.classList.remove('sun-icon');

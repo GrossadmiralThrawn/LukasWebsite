@@ -27,7 +27,7 @@
 
     <!-- Bilder und Beschreibungen anzeigen -->
     <div class="image-container-big" th:each="imageLink, iterStat : ${project.imageLinks}">
-        <img th:src="@{'/images/' + ${imageLink.image.id}}" th:alt="${imageLink.description}" />
+        <img th:src="@{'/pictures/' + ${imageLink.image.id}}" th:alt="${imageLink.description}" />
 
         <!-- Bildbeschreibung unter dem Bild -->
         <p th:text="${imageLink.description}"></p>
@@ -42,7 +42,6 @@
         <p class="intro-text" th:text="${project.conclusionText}"></p>
     </div>
 </div>
-
 
 <script>
     const modeToggle = document.getElementById('modeToggle');
