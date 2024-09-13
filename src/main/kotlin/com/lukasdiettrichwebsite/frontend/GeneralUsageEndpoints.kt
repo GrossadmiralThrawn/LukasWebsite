@@ -6,7 +6,6 @@ package com.lukasdiettrichwebsite.frontend
 import com.lukasdiettrichwebsite.backend.projectbackend.ProjectService
 import com.lukasdiettrichwebsite.backend.projectbackend.projectRepositorys.ProjectImageRepository
 import com.lukasdiettrichwebsite.backend.statistics.StatisticsService
-import jakarta.servlet.http.HttpServletRequest
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-
-
 
 
 @Controller
