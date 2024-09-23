@@ -6,6 +6,8 @@
     <title>Statistiken</title>
     <link rel="stylesheet" th:href="@{/styles.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body class="dark-mode">
 <h1>Statistiken</h1>
@@ -32,5 +34,176 @@
     </tr>
     </tbody>
 </table>
+
+
+<!-- Systeminformationen mit CPU und RAM-Auslastung -->
+<div>
+    <h2>Systeminformationen</h2>
+    <br>
+    <div class="chart-wrapper">
+        <!-- Canvas-Elemente für die Diagramme -->
+        <div class="chart-container">
+            <canvas id="cpuChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="ramChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<!-- Bereich für die Aufrufstatistiken der letzten 7 Tage -->
+<div>
+    <h2>Aufrufe der letzten 7 Tage</h2>
+    <!-- Canvas-Element für das Aufrufe-Diagramm -->
+    <canvas id="requestChart" width="400" height="200"></canvas>
+</div>
+<div>
+    <!-- Anzeige der Anzahl der Aufrufe in der letzten Woche -->
+    <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
+</div>
+
+
+
+<!-- Skripte für die Diagramme und Datenaktualisierungen -->
+<script>
+    let cpuChart, ramChart, requestChart;
+    const MAX_POINTS = 10; // Maximale Anzahl der Datenpunkte im Diagramm
+
+    $(document).ready(function() {
+        // Initiale Diagramm-Konfiguration für CPU-Auslastung
+        const ctxCpu = document.getElementById('cpuChart').getContext('2d');
+        cpuChart = new Chart(ctxCpu, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'CPU-Auslastung (%)',
+                    data: [],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+
+        // Initiale Diagramm-Konfiguration für RAM-Auslastung
+        const ctxRam = document.getElementById('ramChart').getContext('2d');
+        ramChart = new Chart(ctxRam, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'RAM-Auslastung (%)',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    fill: true
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 100 }
+                }
+            }
+        });
+
+        // Initiale Konfiguration für das Aufrufe-Diagramm (Balkendiagramm)
+        const ctxRequest = document.getElementById('requestChart').getContext('2d');
+        requestChart = new Chart(ctxRequest, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Anzahl der Aufrufe',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                if (Number.isInteger(value)) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Periodische Aktualisierung der CPU- und RAM-Daten
+        setInterval(fetchAndUpdateSystemData, 500); // Alle 500 Millisekunden
+
+        // Aufruf-Daten für die letzten 7 Tage abfragen und das Diagramm aktualisieren
+        fetchAndDisplayRequestData();
+    });
+
+    // Funktion zum Abrufen und Aktualisieren der CPU- und RAM-Daten
+    function fetchAndUpdateSystemData() {
+        $.ajax({
+            url: '/user/systemData',
+            method: 'GET',
+            success: function(data) {
+                console.log("Daten empfangen:", data); // Debugging
+                const currentTime = new Date().toLocaleTimeString();
+
+                // CPU-Daten aktualisieren
+                if (cpuChart.data.labels.length >= MAX_POINTS) {
+                    cpuChart.data.labels.shift();
+                    cpuChart.data.datasets[0].data.shift();
+                }
+                cpuChart.data.labels.push(currentTime);
+                cpuChart.data.datasets[0].data.push(data.cpuUsage);
+                cpuChart.update();
+
+                // RAM-Daten aktualisieren
+                if (ramChart.data.labels.length >= MAX_POINTS) {
+                    ramChart.data.labels.shift();
+                    ramChart.data.datasets[0].data.shift();
+                }
+                ramChart.data.labels.push(currentTime);
+                ramChart.data.datasets[0].data.push(data.ramUsage);
+                ramChart.update();
+            },
+            error: function(xhr, status, error) {
+                console.error("Fehler beim Abrufen der Systemdaten:", status, error);
+            }
+        });
+    }
+
+    // Funktion zum Abrufen und Anzeigen der Aufruf-Daten
+    function fetchAndDisplayRequestData() {
+        $.ajax({
+            url: '/user/statisticsData',
+            method: 'GET',
+            success: function(data) {
+                console.log("Aufruf-Daten empfangen:", data); // Debugging
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                // Aktualisiere das Aufrufe-Diagramm mit den neuen Daten
+                requestChart.data.labels = labels;
+                requestChart.data.datasets[0].data = values;
+                requestChart.update();
+            }
+        });
+    }
+</script>
 </body>
 </html>

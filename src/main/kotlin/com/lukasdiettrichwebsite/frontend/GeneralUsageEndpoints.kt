@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
 
+
+
 @Controller
 class GeneralUsageEndpoints (private val statisticsService: StatisticsService, private val projectImageRepository: ProjectImageRepository, private val projectService: ProjectService) {
     @GetMapping

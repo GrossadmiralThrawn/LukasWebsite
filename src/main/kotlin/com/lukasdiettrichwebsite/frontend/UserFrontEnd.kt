@@ -47,6 +47,9 @@ class UserFrontEnd(
         return "login"
     }
 
+
+
+
     @GetMapping("/user/dashboard")
     fun dashboard(model: Model): String {
         val lastWeekStatistics = statisticsService.getLastWeekStatistics()
@@ -54,11 +57,17 @@ class UserFrontEnd(
         return "dashboard"
     }
 
+
+
+
     @GetMapping("/user/statisticsData")
     @ResponseBody
     fun getStatisticsData(): Map<String, Long> {
         return statisticsService.getLastWeekStatisticsByInterval()
     }
+
+
+
 
     @GetMapping("/user/systemData")
     @ResponseBody
@@ -68,12 +77,18 @@ class UserFrontEnd(
         return mapOf("cpuUsage" to cpuUsage, "ramUsage" to ramUsage)
     }
 
+
+
+
     @GetMapping("/user/statistics")
     fun getStatistics(model: Model): String {
         val statistics = statisticsService.getAllStatistics()
         model.addAttribute("statistics", statistics)
         return "statistics"
     }
+
+
+
 
     @PostMapping("/user/statistics")
     fun postStatistics(model: Model): String {
@@ -82,11 +97,17 @@ class UserFrontEnd(
         return "statistics"
     }
 
+
+
+
     @GetMapping("/user/changePassword")
     fun showChangePasswordForm(model: Model): String {
         model.addAttribute("passwordChangeRequest", PasswordChangeRequest("", "", ""))
         return "changePassword"
     }
+
+
+
 
     @PostMapping("/user/changePassword")
     fun changePassword(
@@ -111,10 +132,16 @@ class UserFrontEnd(
         return "changePassword"
     }
 
+
+
+
     @GetMapping("/user/logout")
     fun logout(): String {
         return "redirect:/user/login"
     }
+
+
+
 
     @GetMapping("/user/addProject")
     fun addProject(): String {
