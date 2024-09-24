@@ -11,4 +11,5 @@ interface StatisticsRepository: CrudRepository<StatisticsData, ULong> {
     fun findBySessionIdAndUrl(id: String, userId: String): StatisticsData?
     fun findAllByStartTimeAfter(startTime: LocalDateTime): List<StatisticsData>
     fun findAllByStartTimeBetween(start: LocalDateTime, end: LocalDateTime): List<StatisticsData>
+    fun findAllByEndTimeIsNull(): List<StatisticsData>
 }

@@ -23,7 +23,6 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Iteriere über die Statistiken und rendere die Zeilen -->
     <tr th:each="statistic : ${statistics}">
         <td th:text="${statistic.id}"></td>
         <td th:text="${statistic.sessionId}"></td>
@@ -35,13 +34,10 @@
     </tbody>
 </table>
 
-
-<!-- Systeminformationen mit CPU und RAM-Auslastung -->
 <div>
     <h2>Systeminformationen</h2>
     <br>
     <div class="chart-wrapper">
-        <!-- Canvas-Elemente für die Diagramme -->
         <div class="chart-container">
             <canvas id="cpuChart"></canvas>
         </div>
@@ -53,33 +49,42 @@
 
 <br>
 
-<!-- Bereich für die Aufrufstatistiken der letzten 7 Tage -->
 <div>
     <h2>Aufrufe der letzten 7 Tage</h2>
-    <!-- Canvas-Element für das Aufrufe-Diagramm -->
     <canvas id="requestChart" width="400" height="200"></canvas>
 </div>
 <div>
-    <!-- Anzeige der Anzahl der Aufrufe in der letzten Woche -->
     <p>Anzahl der Aufrufe in der letzten Woche: <span th:text="${lastWeekStatistics}">0</span></p>
 </div>
-
-
+<br>
+<div>
+    <h2>Systemstatistiken</h2>
+    <div class="chart-container">
+        <canvas id="diskUsageChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="networkUsageChart"></canvas>
+    </div>
+    <p>Fehlerraten: <span id="errorRate">0</span>%</p>
+    <p>Aktive Benutzersitzungen: <span id="activeSessions">0</span></p>
+    <p>Datenbankabfrage-Performance: <span id="dbPerformance">0</span> ms</p>
+</div>
 
 <!-- Skripte für die Diagramme und Datenaktualisierungen -->
 <script>
-    let cpuChart, ramChart, requestChart;
-    const MAX_POINTS = 10; // Maximale Anzahl der Datenpunkte im Diagramm
+    let cpuChart, ramChart, requestChart, diskUsageChart;
+    const MAX_POINTS = 10; // Maximum number of data points in the chart
+    const ONE_DAY_MS = 24 * 60 * 60 * 1000; // Milliseconds per day
 
-    $(document).ready(function() {
-        // Initiale Diagramm-Konfiguration für CPU-Auslastung
+    $(document).ready(function () {
+        // Initial CPU Usage Chart Configuration
         const ctxCpu = document.getElementById('cpuChart').getContext('2d');
         cpuChart = new Chart(ctxCpu, {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'CPU-Auslastung (%)',
+                    label: 'CPU Usage (%)',
                     data: [],
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -94,14 +99,14 @@
             }
         });
 
-        // Initiale Diagramm-Konfiguration für RAM-Auslastung
+        // Initial RAM Usage Chart Configuration
         const ctxRam = document.getElementById('ramChart').getContext('2d');
         ramChart = new Chart(ctxRam, {
             type: 'line',
             data: {
                 labels: [],
                 datasets: [{
-                    label: 'RAM-Auslastung (%)',
+                    label: 'RAM Usage (%)',
                     data: [],
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
@@ -116,54 +121,46 @@
             }
         });
 
-        // Initiale Konfiguration für das Aufrufe-Diagramm (Balkendiagramm)
-        const ctxRequest = document.getElementById('requestChart').getContext('2d');
-        requestChart = new Chart(ctxRequest, {
-            type: 'bar',
+        // Disk Usage Chart Configuration
+        const ctxDisk = document.getElementById('diskUsageChart').getContext('2d');
+        diskUsageChart = new Chart(ctxDisk, {
+            type: 'doughnut',
             data: {
-                labels: [],
+                labels: ['Used Space', 'Free Space'],
                 datasets: [{
-                    label: 'Anzahl der Aufrufe',
-                    data: [],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    data: [0, 100], // Dummy data
+                    backgroundColor: ['rgba(255, 0, 0, 0.6)', 'rgba(54, 162, 235, 0.2)'],
+                    borderColor: ['rgba(255, 0, 0, 1)', 'rgba(54, 162, 235, 1)'],
                     borderWidth: 1
                 }]
             },
             options: {
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                if (Number.isInteger(value)) {
-                                    return value;
-                                }
-                            }
-                        }
-                    }
-                }
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
 
-        // Periodische Aktualisierung der CPU- und RAM-Daten
-        setInterval(fetchAndUpdateSystemData, 500); // Alle 500 Millisekunden
+        // Fetch and update system data every 500ms
+        setInterval(fetchAndUpdateSystemData, 500);
 
-        // Aufruf-Daten für die letzten 7 Tage abfragen und das Diagramm aktualisieren
+        // Fetch disk usage daily
+        fetchAndUpdateDiskUsage();
+        setInterval(fetchAndUpdateDiskUsage, ONE_DAY_MS);
+
+        // Fetch request data for the last 7 days and update the chart
         fetchAndDisplayRequestData();
     });
 
-    // Funktion zum Abrufen und Aktualisieren der CPU- und RAM-Daten
+    // Function to fetch and update CPU and RAM usage
     function fetchAndUpdateSystemData() {
         $.ajax({
             url: '/user/systemData',
             method: 'GET',
-            success: function(data) {
-                console.log("Daten empfangen:", data); // Debugging
+            success: function (data) {
+                console.log("System Data received:", data);
                 const currentTime = new Date().toLocaleTimeString();
 
-                // CPU-Daten aktualisieren
+                // Update CPU data
                 if (cpuChart.data.labels.length >= MAX_POINTS) {
                     cpuChart.data.labels.shift();
                     cpuChart.data.datasets[0].data.shift();
@@ -172,7 +169,7 @@
                 cpuChart.data.datasets[0].data.push(data.cpuUsage);
                 cpuChart.update();
 
-                // RAM-Daten aktualisieren
+                // Update RAM data
                 if (ramChart.data.labels.length >= MAX_POINTS) {
                     ramChart.data.labels.shift();
                     ramChart.data.datasets[0].data.shift();
@@ -181,26 +178,44 @@
                 ramChart.data.datasets[0].data.push(data.ramUsage);
                 ramChart.update();
             },
-            error: function(xhr, status, error) {
-                console.error("Fehler beim Abrufen der Systemdaten:", status, error);
+            error: function (xhr, status, error) {
+                console.error("Error fetching system data:", status, error);
             }
         });
     }
 
-    // Funktion zum Abrufen und Anzeigen der Aufruf-Daten
+    // Function to fetch and display request data for the last 7 days
     function fetchAndDisplayRequestData() {
         $.ajax({
-            url: '/user/statisticsData',
+            url: '/statisticsData',
             method: 'GET',
-            success: function(data) {
-                console.log("Aufruf-Daten empfangen:", data); // Debugging
+            success: function (data) {
+                console.log("Request data received:", data);
                 const labels = Object.keys(data);
                 const values = Object.values(data);
 
-                // Aktualisiere das Aufrufe-Diagramm mit den neuen Daten
+                // Update the request chart with new data
                 requestChart.data.labels = labels;
                 requestChart.data.datasets[0].data = values;
                 requestChart.update();
+            }
+        });
+    }
+
+    // Function to fetch and update disk usage (once a day)
+    function fetchAndUpdateDiskUsage() {
+        $.ajax({
+            url: '/user/diskUsageData',
+            method: 'GET',
+            success: function (data) {
+                console.log("Disk usage data received:", data);
+
+                // Update disk usage with the new data
+                diskUsageChart.data.datasets[0].data = [data.usedSpace, data.freeSpace];
+                diskUsageChart.update();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching disk usage data:", status, error);
             }
         });
     }
