@@ -184,23 +184,29 @@
         });
     }
 
+
+
+
     // Function to fetch and display request data for the last 7 days
     function fetchAndDisplayRequestData() {
         $.ajax({
-            url: '/statisticsData',
+            url: '/user/statisticsData',
             method: 'GET',
-            success: function (data) {
-                console.log("Request data received:", data);
+            success: function(data) {
+                console.log("Aufruf-Daten empfangen:", data); // Debugging
                 const labels = Object.keys(data);
                 const values = Object.values(data);
 
-                // Update the request chart with new data
+                // Aktualisiere das Aufrufe-Diagramm mit den neuen Daten
                 requestChart.data.labels = labels;
                 requestChart.data.datasets[0].data = values;
                 requestChart.update();
             }
         });
     }
+
+
+
 
     // Function to fetch and update disk usage (once a day)
     function fetchAndUpdateDiskUsage() {
