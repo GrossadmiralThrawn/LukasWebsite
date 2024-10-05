@@ -28,21 +28,12 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
     private val systemInfo = SystemInfo()
     private val processor: CentralProcessor = systemInfo.hardware.processor
     private val memory: GlobalMemory = systemInfo.hardware.memory
-    private val os: OperatingSystem = systemInfo.operatingSystem
-    private val diskStores: Array<HWDiskStore> = systemInfo.hardware.diskStores.toTypedArray()
-    private val networkParams: NetworkParams = os.networkParams
-
-
-
 
     // Methode, um die Anzahl der Aufrufe in den letzten 7 Tagen zu ermitteln
     fun getLastWeekStatistics(): Long {
         val oneWeekAgo = LocalDateTime.now().minusDays(7)
         return statisticsDataRepository.findAllByStartTimeAfter(oneWeekAgo).size.toLong()
     }
-
-
-
 
     fun getLastWeekStatisticsByInterval(): Map<String, Long> {
         val now = LocalDateTime.now()
@@ -65,9 +56,6 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
         return intervals
     }
 
-
-
-
     // Methode zur Berechnung der CPU-Auslastung
     fun getCpuUsage(): Double {
         return try {
@@ -75,7 +63,10 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
             val objectName = ObjectName("java.lang:type=OperatingSystem")
             val attributes: AttributeList = mbs.getAttributes(objectName, arrayOf("SystemCpuLoad"))
 
-            if (attributes.isEmpty()) return 0.0
+            // Überprüfe, ob Attribute vorhanden sind und ob das erste Attribut einen Wert hat
+            if (attributes.isEmpty()) {
+                return 0.0
+            }
 
             val cpuLoadAttribute = attributes[0] as javax.management.Attribute
             val cpuLoad = cpuLoadAttribute.value as Double
@@ -89,71 +80,12 @@ class StatisticsService(private val statisticsDataRepository: StatisticsReposito
     }
 
 
-
-
     // Methode, um die RAM-Auslastung zu berechnen
     fun getRamUsage(): Double {
         val totalMemory = memory.total
         val availableMemory = memory.available
         val usedMemory = totalMemory - availableMemory
         return (usedMemory.toDouble() / totalMemory) * 100
-    }
-
-
-
-
-    // Festplattennutzung berechnen
-    fun getDiskUsage(): Map<String, Double> {
-        val fileSystem = systemInfo.operatingSystem.fileSystem
-        return fileSystem.fileStores.associate { fileStore ->
-            val totalSpace = fileStore.totalSpace.toDouble()
-            val usableSpace = fileStore.usableSpace.toDouble()
-
-            if (totalSpace == 0.0) {
-                fileStore.name to 0.0
-            } else {
-                val usedPercentage = ((totalSpace - usableSpace) / totalSpace) * 100
-                fileStore.name to usedPercentage
-            }
-        }
-    }
-
-
-
-
-
-
-    // Methode zur Berechnung der Netzwerkauslastung (Netzwerkinformationen)
-    fun getNetworkUsage(): Map<String, String> {
-        return mapOf(
-            "Host Name" to networkParams.hostName,
-            "Domain Name" to networkParams.domainName,
-            "IPv4 Gateway" to networkParams.ipv4DefaultGateway,
-            "IPv6 Gateway" to networkParams.ipv6DefaultGateway,
-            "DNS Servers" to networkParams.dnsServers.joinToString(", ")
-        )
-    }
-
-    // Methode zur Berechnung der Fehlerraten
-    fun getErrorRates(): Double {
-        // Dummy implementation, Fehlerraten müssen über Log-Analyse oder API ermittelt werden
-        return 0.0
-    }
-
-    // Methode, um die Anzahl der aktiven Sitzungen zu ermitteln
-    fun getActiveUserSessions(): Long {
-        return statisticsDataRepository.findAllByEndTimeIsNull().size.toLong()
-    }
-
-    // Methode zur Ermittlung der Performance von Datenbankabfragen
-    fun getDatabaseQueryPerformance(): Map<String, Long> {
-        // Beispiel für eine einfache Performance-Analyse von häufigen Abfragen
-        val startTime = System.nanoTime()
-        statisticsDataRepository.findAll() // Beispielabfrage
-        val endTime = System.nanoTime()
-
-        val duration = endTime - startTime
-        return mapOf("QueryDurationInNanoSeconds" to duration)
     }
 
     fun recordStatistics(url: String, request: HttpServletRequest) {
